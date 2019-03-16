@@ -3,9 +3,10 @@
     "module": "commonjs",
     "target": "es5",
     "noEmitHelpers": true,
-    "sourceMap": false
+    "sourceMap": true
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "release"
   ]
 }
