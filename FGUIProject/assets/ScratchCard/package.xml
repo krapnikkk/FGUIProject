@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="bbc15022">
+  <resources>
+    <component id="a7vi0" name="scratch.xml" path="/" exported="true"/>
+    <image id="ir7j1" name="书包.png" path="/"/>
+    <image id="ir7j2" name="刮卡区域.png" path="/"/>
+    <image id="ir7j3" name="刮刮卡.png" path="/"/>
+    <component id="ir7j4" name="Main.xml" path="/" exported="true"/>
+    <component id="pd965" name="card.xml" path="/"/>
+    <image id="pd967" name="bg.png" path="/"/>
+  </resources>
+  <publish name="ScratchCard"/>
+</packageDescription>

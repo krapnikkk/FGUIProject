@@ -1,7 +1,5 @@
 import GameConfig from "./GameConfig";
-import MainPanel from "./MainPanel";
-import Handler = laya.utils.Handler;
-import Loader = laya.net.Loader;
+import DemoEntry from "./demo/DemoEntry";
 class Main {
 	constructor() {
 		//根据IDE设置初始化引擎		
@@ -11,6 +9,8 @@ class Main {
 		Laya["DebugPanel"] && Laya["DebugPanel"].enable();
 		Laya.stage.scaleMode = GameConfig.scaleMode;
 		Laya.stage.screenMode = GameConfig.screenMode;
+		Laya.stage.alignV = GameConfig.alignV;
+		Laya.stage.alignH = GameConfig.alignH;
 		//兼容微信不支持加载scene后缀场景
 		Laya.URL.exportSceneToJson = GameConfig.exportSceneToJson;
 
@@ -32,23 +32,11 @@ class Main {
 	onConfigLoaded(): void {
 		//加载IDE指定的场景
 		// GameConfig.startScene && Laya.Scene.open(GameConfig.startScene);
-		Laya.loader.load([
-			{ url: "res/Basic_atlas0.png", type: Loader.IMAGE },
-			{ url: "res/Basic.fui", type: Loader.BUFFER }
-			], Handler.create(this, this.onLoaded));
+
+		Laya.stage.addChild(fgui.GRoot.inst.displayObject);
+
+		new DemoEntry();
 	}
-	
-	onLoaded(): void {
-        Laya.stage.addChild(fairygui.GRoot.inst.displayObject);
-
-        fairygui.UIPackage.addPackage("res/Basic");		
-        fairygui.UIConfig.defaultFont = "Microsoft YaHei";
-        fairygui.UIConfig.verticalScrollBar = "ui://Basic/ScrollBar_VT";
-        fairygui.UIConfig.horizontalScrollBar = "ui://Basic/ScrollBar_HZ";
-        fairygui.UIConfig.popupMenu = "ui://Basic/PopupMenu";
-
-        new MainPanel();
-    }
 }
 //激活启动类
 new Main();

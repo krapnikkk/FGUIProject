@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1176,916">
+  <displayList>
+    <image id="n0_pd96" name="n0" src="ir7j3" fileName="刮刮卡.png" xy="0,0"/>
+    <image id="n1_pd96" name="n1" src="ir7j2" fileName="刮卡区域.png" xy="160,100"/>
+    <component id="n2_pd96" name="n2" src="a7vi0" fileName="scratch.xml" xy="158,98">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </component>
+  </displayList>
+</component>

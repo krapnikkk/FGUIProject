@@ -2,10 +2,11 @@
     "x":0,
     "type":"Scene",
     "selectedBox":1,
-    "selecteID":20,
+    "searchKey":"Scene,gameBox",
     "referenceLines":null,
     "props":{"width":640,"sceneColor":"#000000","runtime":"script/GameUI.ts","name":"gameBox","height":1136},
     "nodeParent":-1,
+    "maxID":21,
     "label":"gameBox",
     "isOpen":true,
     "isDirectory":true,
@@ -16,6 +17,7 @@
         {
             "x":15,
             "type":"Sprite",
+            "searchKey":"Sprite,ground",
             "props":{"y":1116,"x":-83,"width":805,"texture":"test/block.png","name":"ground","height":20},
             "nodeParent":1,
             "label":"ground",
@@ -27,6 +29,7 @@
             "child":[
                 {
                     "type":"BoxCollider",
+                    "searchKey":"BoxCollider",
                     "props":{"y":0,"x":0,"width":805,"label":"ground","height":20},
                     "nodeParent":3,
                     "label":"BoxCollider",
@@ -39,6 +42,7 @@
                 },
                 {
                     "type":"RigidBody",
+                    "searchKey":"RigidBody",
                     "props":{"type":"static"},
                     "nodeParent":3,
                     "label":"RigidBody",
@@ -53,6 +57,7 @@
         {
             "x":15,
             "type":"Sprite",
+            "searchKey":"Sprite,gameBox",
             "props":{"y":0,"x":0,"name":"gameBox"},
             "nodeParent":1,
             "label":"gameBox",
@@ -66,6 +71,7 @@
         {
             "x":15,
             "type":"Sprite",
+            "searchKey":"Sprite,UI",
             "props":{"y":0,"x":0,"name":"UI"},
             "nodeParent":1,
             "label":"UI",
@@ -78,6 +84,7 @@
                 {
                     "x":30,
                     "type":"Label",
+                    "searchKey":"Label,scoreLbl",
                     "props":{"y":50,"x":158,"width":272,"var":"scoreLbl","height":47,"fontSize":40,"color":"#51c524","align":"center"},
                     "nodeParent":14,
                     "label":"scoreLbl",
@@ -91,6 +98,7 @@
                 {
                     "x":30,
                     "type":"Label",
+                    "searchKey":"Label,tipLbll",
                     "props":{"y":0,"x":0,"width":640,"var":"tipLbll","valign":"middle","text":"别让箱子掉下来\\n\\n点击屏幕开始游戏","height":1136,"fontSize":40,"color":"#c6302e","align":"center"},
                     "nodeParent":14,
                     "label":"tipLbll",
@@ -107,11 +115,13 @@
             "type":"Script",
             "switchAble":true,
             "source":"src/script/GameControl.ts",
+            "searchKey":"Script,GameControl",
             "removeAble":true,
-            "props":{"enabled":false,"dropBox":"@Prefab:prefab/DropBox.prefab","bullet":"@Prefab:prefab/Bullet.prefab"},
+            "props":{"enabled":true,"dropBox":"@Prefab:prefab/DropBox.prefab","bullet":"@Prefab:prefab/Bullet.prefab"},
             "nodeParent":1,
             "label":"GameControl",
             "isDirectory":false,
+            "isClose":false,
             "isAniNode":true,
             "hasChild":false,
             "compId":20,
