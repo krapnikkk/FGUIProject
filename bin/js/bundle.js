@@ -7,6 +7,12 @@
             this.preX = 0;
             this.preY = 0;
             this.firstBrush = true;
+            this._circleDiameter = 40;
+            this._percentCover = 0.5;
+            this._pointCount = 100;
+            this._row = 10;
+            this._col = 10;
+            this._pointsArr = [];
         }
         constructFromXML(xml) {
             super.constructFromXML(xml);
@@ -20,10 +26,11 @@
                 if (this.firstBrush) {
                     this._maskPanel.displayObject.graphics.clear();
                     this.firstBrush = false;
+                    this.createPoints(this._maskPanel.width, this._maskPanel.height);
                 }
                 this.preX = evt.target.mouseX;
                 this.preY = evt.target.mouseY;
-                this._maskPanel.displayObject.graphics.drawCircle(this.preX, this.preY, 40, "#a5ff00");
+                this._maskPanel.displayObject.graphics.drawCircle(this.preX, this.preY, this._circleDiameter, "#a5ff00");
                 this.on(Laya.Event.MOUSE_MOVE, this, this.onMouseMove);
             }
             if (this._panel) {
@@ -34,13 +41,39 @@
             var curX = evt.target.mouseX;
             var curY = evt.target.mouseY;
             if (this._maskPanel) {
-                this._maskPanel.displayObject.graphics.drawCircle(curX, curY, 40, "#a5ff00");
+                this._maskPanel.displayObject.graphics.drawCircle(curX, curY, this._circleDiameter, "#a5ff00");
                 this.preX = curX;
                 this.preY = curY;
+            }
+            var point = { x: curX, y: curY };
+            this.pointsHitTest(this._pointsArr, point);
+            console.log(`${this._pointsArr.length}/${this._pointCount}`);
+            if (this._pointsArr.length / this._pointCount <= this._percentCover) {
+                this._maskPanel.displayObject.graphics.drawRect(0, 0, this._maskPanel.width, this._maskPanel.height, "#000");
             }
         }
         onMouseUp(evt) {
             this.off(Laya.Event.MOUSE_MOVE, this, this.onMouseMove);
+        }
+        createPoints(width, height) {
+            let widthSpan = Math.trunc(width / this._row), heightSpan = Math.trunc(height / this._col);
+            for (let i = 0; i < this._row; i++) {
+                for (let j = 0; j < this._col; j++) {
+                    let point = new Laya.Point(widthSpan * i, heightSpan * j);
+                    this._pointsArr.push(point);
+                }
+            }
+        }
+        pointsHitTest(points, source) {
+            return points.some((point, index) => {
+                if (point.distance(source.x, source.y) <= this._circleDiameter) {
+                    points.splice(index, 1);
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            });
         }
     }
 
