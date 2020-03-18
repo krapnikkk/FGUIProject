@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="43,22" extention="Button">
+  <displayList>
+    <text id="n3_10ett" name="title" xy="0,0" size="42,22" font="DFPHaiBaoW12-GB" fontSize="18" color="#f4b24a" bold="true" text="确定"/>
+  </displayList>
+  <Button/>
+</component>

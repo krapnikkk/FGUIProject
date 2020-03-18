@@ -1,7 +1,8 @@
 {
 	"atlasSetting":{
 		"paging":true,
-		"sizeOption":"pot"
+		"sizeOption":"pot",
+		"trimImage":true
 	},
 	"binaryFormat":true,
 	"codeGeneration":{
@@ -16,5 +17,5 @@
 	"compressDesc":true,
 	"fileExtension":"fui",
 	"packageCount":2,
-	"path":"E:\\coding\\layabox\\FGUIProject\\bin\\res\\UI"
+	"path":"..\\bin\\res\\UI"
 }

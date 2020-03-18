@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="hf9z2x8i">
+  <resources>
+    <component id="pkoj0" name="Main.xml" path="/" exported="true"/>
+    <image id="10ett1" name="web.vip.miui.com-page-info-mio-mio-health-showTitle=1&amp;ref=share(iPhone 6).png" path="/res/"/>
+    <image id="10ett2" name="birthdy_base.22989ba6.png" path="/res/"/>
+    <component id="10ett3" name="date_panel.xml" path="/"/>
+    <component id="10ett4" name="item.xml" path="/"/>
+    <component id="10ett5" name="btn_cancel.xml" path="/"/>
+    <component id="10ett6" name="btn_comfirm.xml" path="/"/>
+  </resources>
+  <publish name="DataPicker"/>
+</packageDescription>

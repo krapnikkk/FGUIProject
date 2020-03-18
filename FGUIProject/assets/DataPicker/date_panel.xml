@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="667,280" bgColor="#f4b24a">
+  <displayList>
+    <graph id="n4_10ett" name="n4" xy="0,0" size="668,280" type="rect" lineSize="0" corner="18,18,0,0">
+      <relation target="" sidePair="width-width,height-height,bottom-bottom"/>
+    </graph>
+    <graph id="n6_10ett" name="n6" xy="0,123" size="668,35" type="rect" lineSize="2" lineColor="#ffebebeb" fillColor="#fff5f5f5">
+      <relation target="" sidePair="width-width,middle-middle,top-top"/>
+    </graph>
+    <text id="n7_10ett" name="n7" xy="281,12" size="107,20" font="DFPHaiBaoW12-GB" fontSize="16" bold="true" text="选择出生日期">
+      <relation target="" sidePair="center-center,top-top"/>
+    </text>
+    <component id="n8_10ett" name="n8" src="10ett5" fileName="btn_cancel.xml" xy="13,10">
+      <relation target="" sidePair="left-left,top-top"/>
+    </component>
+    <component id="n9_10ett" name="n9" src="10ett6" fileName="btn_comfirm.xml" xy="615,9">
+      <relation target="" sidePair="right-right,top-top"/>
+    </component>
+    <list id="n1_10ett" name="year_list" xy="67,30" size="86,247" overflow="scroll" scrollBarFlags="2" defaultItem="ui://hf9z2x8i10ett4" align="center" vAlign="middle">
+      <relation target="" sidePair="height-height,center-center,middle-middle,top-top"/>
+      <item title="1"/>
+      <item title="2"/>
+      <item title="3"/>
+      <item title="4"/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+    </list>
+    <list id="n10_10ett" name="month_list" xy="513,30" size="86,247" overflow="scroll" scrollBarFlags="2" defaultItem="ui://hf9z2x8i10ett4" align="center" vAlign="middle">
+      <relation target="" sidePair="height-height,center-center,middle-middle,top-top"/>
+      <item title="1"/>
+      <item title="2"/>
+      <item title="3"/>
+      <item title="4"/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+    </list>
+    <list id="n11_10ett" name="date_list" xy="290,30" size="86,247" overflow="scroll" scrollBarFlags="2" defaultItem="ui://hf9z2x8i10ett4" align="center" vAlign="middle">
+      <relation target="" sidePair="height-height,center-center,middle-middle,top-top"/>
+      <item title="1"/>
+      <item title="2"/>
+      <item title="3"/>
+      <item title="4"/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+    </list>
+  </displayList>
+</component>
