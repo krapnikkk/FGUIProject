@@ -231,6 +231,7 @@
 
     class MainMenu {
         constructor() {
+            this._tagFlag = false;
             fgui.UIPackage.loadPackage("res/UI/MainMenu", Laya.Handler.create(this, this.onUILoaded));
         }
         onUILoaded() {
@@ -246,6 +247,15 @@
             this._view.getChild("n3").onClick(this, function () {
                 this.startDemo(ChatDemo);
             });
+            var reg = Laya.ClassUtils.regClass;
+            reg("ScratchCard", ScratchCard);
+            reg("ChatDemo", ChatDemo);
+            reg("DatePicker", DatePicker);
+            let demoName = this.getQueryString("name");
+            if (demoName && !this._tagFlag) {
+                this._tagFlag = true;
+                this.startDemo(Laya.ClassUtils.getRegClass(demoName));
+            }
         }
         startDemo(demoClass) {
             this._view.dispose();
@@ -254,6 +264,13 @@
         }
         destroy() {
             this._view.dispose();
+        }
+        getQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null)
+                return unescape(r[2]);
+            return null;
         }
     }
 
@@ -313,3 +330,4 @@
     new Main();
 
 }());
+//# sourceMappingURL=bundle.js.map

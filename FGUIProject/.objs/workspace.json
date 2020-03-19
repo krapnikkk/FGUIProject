@@ -1,25 +1,16 @@
 {
 	"backgroundColor": 6710886,
-	"canvasColor": 10066329,
-	"libview.firstColumnWidth": 283,
 	"libview.currentGroup": "",
-	"libview.twoColumn": false,
-	"doc.activeDoc": "ui://y768eypam2by3a",
-	"doc.openedDocs": [
-		"ui://58oxr1hsrftu0",
-		"ui://y768eypafvaib",
-		"ui://y768eypam2by3a"
+	"libview.firstColumnWidth": 283,
+	"libview.expandedNodes": [
+		"hf9z2x8i",
+		"/",
+		"bbc15022",
+		"/"
 	],
+	"doc.openedDocs": [],
+	"libview.twoColumn": false,
 	"auxline2": true,
 	"auxline1": true,
-	"libview.expandedNodes": [
-		"y768eypa",
-		"/",
-		"y768eypa",
-		"/emoji/",
-		"y768eypa",
-		"/images/",
-		"58oxr1hs",
-		"/"
-	]
+	"canvasColor": 10066329
 }

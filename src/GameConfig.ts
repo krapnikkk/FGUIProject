@@ -18,11 +18,6 @@ export default class GameConfig{
     static exportSceneToJson:boolean=true;
     constructor(){}
     static init(){
-        // var reg: Function = Laya.ClassUtils.regClass;
-        // reg("script/GameUI.ts",GameUI);
-        // reg("script/GameControl.ts",GameControl);
-        // reg("script/Bullet.ts",Bullet);
-        // reg("script/DropBox.ts",DropBox);
         fgui.UIObjectFactory.setExtension("ui://ScratchCard/scratch", Scratch);
     }
 }

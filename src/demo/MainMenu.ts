@@ -23,6 +23,15 @@ export default class MainMenu {
         this._view.getChild("n3").onClick(this, function () {
             this.startDemo(ChatDemo);
         });
+        
+        var reg: Function = Laya.ClassUtils.regClass;
+        reg("ScratchCard",ScratchCard);
+        reg("ChatDemo",ChatDemo);
+        reg("DatePicker",DatePicker);
+        let demoName = this.getQueryString("name");
+        if(demoName){
+            this.startDemo(Laya.ClassUtils.getRegClass(demoName));
+        }
     }
 
     startDemo(demoClass: any): void {
@@ -33,5 +42,12 @@ export default class MainMenu {
 
     destroy() {
         this._view.dispose();
+    }
+
+    getQueryString(name: string): string | null {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);
+        return null;
     }
 }
