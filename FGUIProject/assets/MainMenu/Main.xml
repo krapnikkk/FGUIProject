@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="1920,1080">
   <displayList>
-    <graph id="n3_txxc" name="n3" xy="0,0" size="1920,1080" type="rect" lineSize="0" fillColor="#ff333333">
+    <graph id="n3_txxc" name="bg" xy="0,0" size="1920,1080" type="rect" lineSize="0" fillColor="#ff333333">
       <relation target="" sidePair="width-width,height-height"/>
     </graph>
     <component id="n1_rftu" name="n1" src="rftu4" fileName="Button.xml" xy="129,75" size="235,51">
@@ -10,7 +10,7 @@
     <component id="n2_rftu" name="n2" src="rftu4" fileName="Button.xml" xy="129,146" size="235,51">
       <Button title="日期选择"/>
     </component>
-    <component id="n4_pd96" name="n4" src="rftu4" fileName="Button.xml" xy="129,223" size="235,51">
+    <component id="n4_pd96" name="n3" src="rftu4" fileName="Button.xml" xy="129,223" size="235,51">
       <Button title="表情聊天"/>
     </component>
   </displayList>

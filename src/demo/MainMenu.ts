@@ -1,5 +1,5 @@
 import ScratchCard from "./ScratchCard";
-
+import ChatDemo from "./ChatDemo";
 
 export default class MainMenu {
     private _view: fgui.GComponent;
@@ -15,6 +15,9 @@ export default class MainMenu {
 
         this._view.getChild("n1").onClick(this, function () {
             this.startDemo(ScratchCard);
+        });
+        this._view.getChild("n3").onClick(this, function () {
+            this.startDemo(ChatDemo);
         });
     }
 
