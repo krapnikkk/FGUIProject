@@ -45,7 +45,6 @@ export default class Scratch extends fgui.GComponent {
         }
         var point = { x:curX, y:curY} as laya.maths.Point;
         this.pointsHitTest(this._pointsArr,point);
-        console.log(`${this._pointsArr.length}/${this._pointCount}`);
         if(this._pointsArr.length/this._pointCount<=this._percentCover){
             this._maskPanel.displayObject.graphics.drawRect(0,0,this._maskPanel.width, this._maskPanel.height,"#000");
         }

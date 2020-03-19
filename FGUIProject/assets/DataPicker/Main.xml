@@ -7,14 +7,14 @@
     <text id="n2_10ett" name="n2" xy="251,163" size="296,89" font="DFPHaiBaoW12-GB" fontSize="36" color="#6e5f27" align="center" vAlign="middle" autoSize="none" bold="true" text="{1}年{2}月{3}日">
       <relation target="" sidePair="center-center,middle-middle"/>
     </text>
-    <component id="n3_10ett" name="n3" src="10ett3" fileName="date_panel.xml" xy="0,305" size="800,295"/>
+    <component id="n3_10ett" name="n3" src="10ett3" fileName="date_panel.xml" xy="0,305" size="800,295">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </component>
   </displayList>
   <transition name="show">
     <item time="0" type="XY" target="n3_10ett" tween="true" startValue="0,600" endValue="0,306,0,0.51" duration="6"/>
-    <item time="6" type="XY" target="n3_10ett" value="0,306,0,0.51"/>
   </transition>
   <transition name="hide">
     <item time="0" type="XY" target="n3_10ett" tween="true" startValue="0,306,0,0.51" endValue="0,600" duration="6"/>
-    <item time="6" type="XY" target="n3_10ett" value="0,600"/>
   </transition>
 </component>

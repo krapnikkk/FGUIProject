@@ -47,7 +47,6 @@
             }
             var point = { x: curX, y: curY };
             this.pointsHitTest(this._pointsArr, point);
-            console.log(`${this._pointsArr.length}/${this._pointCount}`);
             if (this._pointsArr.length / this._pointCount <= this._percentCover) {
                 this._maskPanel.displayObject.graphics.drawRect(0, 0, this._maskPanel.width, this._maskPanel.height, "#000");
             }
@@ -216,6 +215,20 @@
         }
     }
 
+    class DatePicker {
+        constructor() {
+            fgui.UIPackage.loadPackage("res/UI/DataPicker", Laya.Handler.create(this, this.onUILoaded));
+        }
+        onUILoaded() {
+            this._view = fgui.UIPackage.createObject("DataPicker", "Main").asCom;
+            this._view.makeFullScreen();
+            fgui.GRoot.inst.addChild(this._view);
+        }
+        destroy() {
+            fgui.UIPackage.removePackage("DataPicker");
+        }
+    }
+
     class MainMenu {
         constructor() {
             fgui.UIPackage.loadPackage("res/UI/MainMenu", Laya.Handler.create(this, this.onUILoaded));
@@ -226,6 +239,9 @@
             fgui.GRoot.inst.addChild(this._view);
             this._view.getChild("n1").onClick(this, function () {
                 this.startDemo(ScratchCard);
+            });
+            this._view.getChild("n2").onClick(this, function () {
+                this.startDemo(DatePicker);
             });
             this._view.getChild("n3").onClick(this, function () {
                 this.startDemo(ChatDemo);
