@@ -1,4 +1,4 @@
-# Javascript Notes
+# fairygui + layabox2.0
 
 使用[fairygui](https://www.fairygui.com/) + [layabox2.0](https://www.layabox.com/)实现的一些模块功能案例，不定时更新~
 
@@ -13,6 +13,8 @@
 [/placeholder]:p
 
 [UI工程项目](./FGUIProject)
+
+[案例首页](https://krapnikkk.github.io/FGUIProject/bin)
 
 ## Author
 krapnik
