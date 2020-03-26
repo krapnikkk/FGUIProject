@@ -1,6 +1,6 @@
-import ScratchCard from "./ScratchCard";
+import ScratchCardDemo from "./ScratchCardDemo";
 import ChatDemo from "./ChatDemo";
-import DatePicker from "./DatePicker";
+import DatePickerDemo from "./DatePickerDemo";
 
 export default class MainMenu {
     private _view: fgui.GComponent;
@@ -15,19 +15,19 @@ export default class MainMenu {
         fgui.GRoot.inst.addChild(this._view);
 
         this._view.getChild("n1").onClick(this, function () {
-            this.startDemo(ScratchCard);
+            this.startDemo(ScratchCardDemo);
         });
         this._view.getChild("n2").onClick(this, function () {
-            this.startDemo(DatePicker);
+            this.startDemo(DatePickerDemo);
         });
         this._view.getChild("n3").onClick(this, function () {
             this.startDemo(ChatDemo);
         });
         
         var reg: Function = Laya.ClassUtils.regClass;
-        reg("ScratchCard",ScratchCard);
+        reg("ScratchCard",ScratchCardDemo);
         reg("ChatDemo",ChatDemo);
-        reg("DatePicker",DatePicker);
+        reg("DatePicker",DatePickerDemo);
         let demoName = this.getQueryString("name");
         if(demoName){
             this.startDemo(Laya.ClassUtils.getRegClass(demoName));

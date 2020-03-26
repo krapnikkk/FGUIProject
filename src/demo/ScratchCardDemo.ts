@@ -1,4 +1,4 @@
-export default class ScratchCard {
+export default class ScratchCardDemo {
     private _view: fgui.GComponent;
     constructor() {
         fgui.UIPackage.loadPackage("res/UI/ScratchCard", Laya.Handler.create(this, this.onUILoaded));

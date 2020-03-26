@@ -17,7 +17,7 @@
       <relation target="" sidePair="right-right,top-top"/>
     </component>
     <list id="n1_10ett" name="year_list" xy="67,30" size="86,247" overflow="scroll" scrollBarFlags="2" defaultItem="ui://hf9z2x8i10ett4" align="center" vAlign="middle">
-      <relation target="" sidePair="height-height,center-center,middle-middle,top-top"/>
+      <relation target="" sidePair="center-center,middle-middle,top-top"/>
       <item title="1"/>
       <item title="2"/>
       <item title="3"/>
@@ -61,7 +61,7 @@
       <item/>
     </list>
     <list id="n10_10ett" name="month_list" xy="513,30" size="86,247" overflow="scroll" scrollBarFlags="2" defaultItem="ui://hf9z2x8i10ett4" align="center" vAlign="middle">
-      <relation target="" sidePair="height-height,center-center,middle-middle,top-top"/>
+      <relation target="" sidePair="center-center,middle-middle,top-top"/>
       <item title="1"/>
       <item title="2"/>
       <item title="3"/>
@@ -105,7 +105,7 @@
       <item/>
     </list>
     <list id="n11_10ett" name="date_list" xy="290,30" size="86,247" overflow="scroll" scrollBarFlags="2" defaultItem="ui://hf9z2x8i10ett4" align="center" vAlign="middle">
-      <relation target="" sidePair="height-height,center-center,middle-middle,top-top"/>
+      <relation target="" sidePair="center-center,middle-middle,top-top"/>
       <item title="1"/>
       <item title="2"/>
       <item title="3"/>
@@ -149,4 +149,12 @@
       <item/>
     </list>
   </displayList>
+  <transition name="hide">
+    <item time="0" type="Alpha" tween="true" startValue="1" endValue="0" duration="24"/>
+    <item time="24" type="Visible" value="false"/>
+  </transition>
+  <transition name="show">
+    <item time="0" type="Alpha" tween="true" startValue="0" endValue="1" duration="24"/>
+    <item time="0" type="Visible" value="true"/>
+  </transition>
 </component>

@@ -76,11 +76,33 @@
         }
     }
 
+    class DatePicker extends fgui.GComponent {
+        constructor() {
+            super();
+        }
+        constructFromXML(xml) {
+            super.constructFromXML(xml);
+            Laya.stage.on("date_show", this, this.show);
+            Laya.stage.on("date_hide", this, this.hide);
+            this._btnCancel = this.getChild("n8").asButton;
+            this._btnCancel.onClick(this, this.hide);
+            this._btnComfirm = this.getChild("n9").asButton;
+            this._btnComfirm.onClick(this, this.hide);
+        }
+        show() {
+            this.getTransition("show").play();
+        }
+        hide() {
+            this.getTransition("hide").play();
+        }
+    }
+
     class GameConfig {
         constructor() {
         }
         static init() {
             fgui.UIObjectFactory.setExtension("ui://ScratchCard/scratch", Scratch);
+            fgui.UIObjectFactory.setExtension("ui://DatePicker/datePicker", DatePicker);
         }
     }
     GameConfig.width = 1920;
@@ -97,7 +119,7 @@
     GameConfig.exportSceneToJson = true;
     GameConfig.init();
 
-    class ScratchCard {
+    class ScratchCardDemo {
         constructor() {
             fgui.UIPackage.loadPackage("res/UI/ScratchCard", Laya.Handler.create(this, this.onUILoaded));
         }
@@ -215,23 +237,29 @@
         }
     }
 
-    class DatePicker {
+    class DatePickerDemo {
         constructor() {
-            fgui.UIPackage.loadPackage("res/UI/DataPicker", Laya.Handler.create(this, this.onUILoaded));
+            fgui.UIPackage.loadPackage("res/UI/DatePicker", Laya.Handler.create(this, this.onUILoaded));
         }
         onUILoaded() {
-            this._view = fgui.UIPackage.createObject("DataPicker", "Main").asCom;
+            this._view = fgui.UIPackage.createObject("DatePicker", "Main").asCom;
             this._view.makeFullScreen();
             fgui.GRoot.inst.addChild(this._view);
+            this._btn = this._view.getChild("n1").asButton;
+            this._btn.onClick(this, this.show);
+        }
+        show() {
+            console.log("show");
+            Laya.stage.event("date_show");
         }
         destroy() {
-            fgui.UIPackage.removePackage("DataPicker");
+            this._btn.offClick(this, this.show);
+            fgui.UIPackage.removePackage("DatePicker");
         }
     }
 
     class MainMenu {
         constructor() {
-            this._tagFlag = false;
             fgui.UIPackage.loadPackage("res/UI/MainMenu", Laya.Handler.create(this, this.onUILoaded));
         }
         onUILoaded() {
@@ -239,21 +267,20 @@
             this._view.makeFullScreen();
             fgui.GRoot.inst.addChild(this._view);
             this._view.getChild("n1").onClick(this, function () {
-                this.startDemo(ScratchCard);
+                this.startDemo(ScratchCardDemo);
             });
             this._view.getChild("n2").onClick(this, function () {
-                this.startDemo(DatePicker);
+                this.startDemo(DatePickerDemo);
             });
             this._view.getChild("n3").onClick(this, function () {
                 this.startDemo(ChatDemo);
             });
             var reg = Laya.ClassUtils.regClass;
-            reg("ScratchCard", ScratchCard);
+            reg("ScratchCard", ScratchCardDemo);
             reg("ChatDemo", ChatDemo);
-            reg("DatePicker", DatePicker);
+            reg("DatePicker", DatePickerDemo);
             let demoName = this.getQueryString("name");
-            if (demoName && !this._tagFlag) {
-                this._tagFlag = true;
+            if (demoName) {
                 this.startDemo(Laya.ClassUtils.getRegClass(demoName));
             }
         }
