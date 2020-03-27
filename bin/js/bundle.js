@@ -79,15 +79,56 @@
     class DatePicker extends fgui.GComponent {
         constructor() {
             super();
+            this._yearCount = 100;
+            this._startYear = 1921;
+            this._monthCount = 12;
+            this._startMonth = 1;
+            this._dateCount = 31;
+            this._startDate = 1;
+            this._listRow = 3;
         }
         constructFromXML(xml) {
             super.constructFromXML(xml);
+            this.init();
+        }
+        init() {
             Laya.stage.on("date_show", this, this.show);
             Laya.stage.on("date_hide", this, this.hide);
             this._btnCancel = this.getChild("n8").asButton;
             this._btnCancel.onClick(this, this.hide);
             this._btnComfirm = this.getChild("n9").asButton;
             this._btnComfirm.onClick(this, this.hide);
+            this._yearList = this.getChild("year_list").asList;
+            this._yearList.setVirtualAndLoop();
+            this._yearList.itemRenderer = Laya.Handler.create(this, this.renderYearListItem, null, false);
+            this._yearList.numItems = this._yearCount;
+            this._monthList = this.getChild("month_list").asList;
+            this._monthList.setVirtualAndLoop();
+            this._monthList.itemRenderer = Laya.Handler.create(this, this.renderMonthListItem, null, false);
+            this._monthList.numItems = this._monthCount;
+            this._dateList = this.getChild("date_list").asList;
+            this._dateList.setVirtualAndLoop();
+            this._dateList.itemRenderer = Laya.Handler.create(this, this.renderDateListItem, null, false);
+            this._dateList.numItems = this._dateCount;
+            let date = new Date();
+            this.setDate(date.getFullYear(), date.getMonth(), date.getDate());
+        }
+        renderYearListItem(index, obj) {
+            var item = obj;
+            item.title = this._startYear + index + "年";
+        }
+        renderMonthListItem(index, obj) {
+            var item = obj;
+            item.title = this._startMonth + index + "月";
+        }
+        renderDateListItem(index, obj) {
+            var item = obj;
+            item.title = this._startDate + index + "日";
+        }
+        setDate(year, month, day) {
+            this._yearList.scrollToView(3);
+            this._monthList.scrollToView(2);
+            this._dateList.scrollToView(1);
         }
         show() {
             this.getTransition("show").play();
@@ -249,7 +290,6 @@
             this._btn.onClick(this, this.show);
         }
         show() {
-            console.log("show");
             Laya.stage.event("date_show");
         }
         destroy() {

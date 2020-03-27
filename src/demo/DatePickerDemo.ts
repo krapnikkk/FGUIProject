@@ -14,7 +14,6 @@ export default class DatePickerDemo {
     }
 
     show():void {
-        console.log("show");
         Laya.stage.event("date_show");
     }
 
