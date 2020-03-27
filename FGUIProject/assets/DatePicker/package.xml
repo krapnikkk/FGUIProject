@@ -9,6 +9,7 @@
     <component id="10ett5" name="btn_cancel.xml" path="/"/>
     <component id="10ett6" name="btn_comfirm.xml" path="/"/>
     <component id="zz4nt7" name="btn_date.xml" path="/"/>
+    <component id="dr4lt8" name="element.xml" path="/"/>
   </resources>
   <publish name="DatePicker"/>
 </packageDescription>
