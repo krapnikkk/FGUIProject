@@ -4,7 +4,7 @@
     <component id="n1_10ett" name="n1" src="zz4nt7" fileName="btn_date.xml" xy="87,63">
       <relation target="" sidePair="center-center,middle-middle"/>
     </component>
-    <text id="n2_10ett" name="n2" xy="251,163" size="296,89" font="DFPHaiBaoW12-GB" fontSize="36" color="#6e5f27" align="center" vAlign="middle" vars="true" autoSize="none" bold="true" text="{year=2000}年{month=1}月{date=1}日">
+    <text id="n2_10ett" name="n2" xy="226,187" size="346,40" font="DFPHaiBaoW12-GB" fontSize="36" color="#6e5f27" align="center" vAlign="middle" vars="true" bold="true" text="{year=2000}年{month=12}月{date=31}日">
       <relation target="" sidePair="center-center,middle-middle"/>
     </text>
     <component id="n3_10ett" name="n3" src="10ett3" fileName="datePicker.xml" xy="0,0" visible="false">

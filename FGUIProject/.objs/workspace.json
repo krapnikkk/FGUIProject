@@ -2,17 +2,20 @@
 	"backgroundColor": 6710886,
 	"doc.openedDocs": [
 		"ui://hf9z2x8ipkoj0",
-		"ui://hf9z2x8i10ett3"
+		"ui://hf9z2x8i10ett4",
+		"ui://hf9z2x8idr4lt8"
 	],
+	"auxline1": true,
 	"libview.expandedNodes": [
+		"hf9z2x8i",
+		"/",
 		"bbc15022",
 		"/"
 	],
-	"libview.firstColumnWidth": 283,
-	"doc.activeDoc": "ui://hf9z2x8i10ett3",
+	"auxline2": true,
 	"canvasColor": 10066329,
 	"libview.currentGroup": "",
-	"libview.twoColumn": false,
-	"auxline2": true,
-	"auxline1": true
+	"libview.firstColumnWidth": 283,
+	"doc.activeDoc": "ui://hf9z2x8ipkoj0",
+	"libview.twoColumn": false
 }
