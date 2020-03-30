@@ -79,17 +79,18 @@
     class DatePicker extends fgui.GComponent {
         constructor() {
             super();
-            this._yearCount = 100;
-            this._startYear = 1921;
-            this._monthCount = 12;
+            this._yearTotalCount = new Date().getFullYear();
+            this._yearCount = 101;
+            this._startYear = this._yearTotalCount - this._yearCount;
+            this._monthTotalCount = 12;
             this._startMonth = 1;
-            this._dateCount = 31;
+            this._dateTotalCount = 31;
             this._startDate = 1;
-            this._listRow = 3;
+            this._listRow = 4;
         }
         constructFromXML(xml) {
             super.constructFromXML(xml);
-            this.init();
+            Laya.stage.on("dataPicker_init", this, this.init);
         }
         init() {
             Laya.stage.on("date_show", this, this.show);
@@ -102,20 +103,23 @@
             this._yearList.setVirtualAndLoop();
             this._yearList.itemRenderer = Laya.Handler.create(this, this.renderYearListItem, null, false);
             this._yearList.numItems = this._yearCount;
+            this._yearList.on(fgui.Events.SCROLL, this, this.yearOnScroll);
             this._monthList = this.getChild("month_list").asList;
             this._monthList.setVirtualAndLoop();
             this._monthList.itemRenderer = Laya.Handler.create(this, this.renderMonthListItem, null, false);
-            this._monthList.numItems = this._monthCount;
+            this._monthList.numItems = this._monthTotalCount;
+            this._monthList.on(fgui.Events.SCROLL, this, this.monthOnScroll);
             this._dateList = this.getChild("date_list").asList;
             this._dateList.setVirtualAndLoop();
             this._dateList.itemRenderer = Laya.Handler.create(this, this.renderDateListItem, null, false);
-            this._dateList.numItems = this._dateCount;
+            this._dateList.numItems = this._dateTotalCount;
+            this._dateList.on(fgui.Events.SCROLL, this, this.dateOnScroll);
             let date = new Date();
-            this.setDate(date.getFullYear(), date.getMonth(), date.getDate());
+            this.setDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
         }
         renderYearListItem(index, obj) {
             var item = obj;
-            item.title = this._startYear + index + "年";
+            item.title = this._startYear + index + 1 + "年";
         }
         renderMonthListItem(index, obj) {
             var item = obj;
@@ -125,10 +129,66 @@
             var item = obj;
             item.title = this._startDate + index + "日";
         }
-        setDate(year, month, day) {
-            this._yearList.scrollToView(3);
-            this._monthList.scrollToView(2);
-            this._dateList.scrollToView(1);
+        yearOnScroll() {
+            let nowIndex = this._yearList.getFirstChildInView();
+            this._currentYear = nowIndex + this._listRow > this._yearCount ? this._startYear + nowIndex + this._listRow - this._yearCount : this._startYear + nowIndex + this._listRow;
+            this.updateDateList();
+            this.updateDateText();
+        }
+        monthOnScroll() {
+            let nowIndex = this._monthList.getFirstChildInView();
+            this._currentMonth = nowIndex + this._listRow > this._monthTotalCount ? this._listRow + nowIndex - this._monthTotalCount : this._listRow + nowIndex;
+            this.updateDateList();
+            this.updateDateText();
+        }
+        dateOnScroll() {
+            let nowIndex = this._dateList.getFirstChildInView();
+            this._currentDate = nowIndex + this._listRow > this._dateTotalCount ? this._listRow + nowIndex - this._dateTotalCount : this._listRow + nowIndex;
+            console.log("dateOnScroll:" + this._currentDate);
+            this.updateDateText();
+        }
+        setDate(year, month, date) {
+            year -= this._startYear;
+            let yearIdx = year - this._listRow >= 0 ? year - this._listRow : this._yearTotalCount + year - this._listRow, monthIdx = month - this._listRow >= 0 ? month - this._listRow : this._monthTotalCount + month - this._listRow, dateIdx = date - this._listRow >= 0 ? date - this._listRow : this._dateTotalCount + date - this._listRow;
+            this._yearList.scrollToView(yearIdx);
+            this._monthList.scrollToView(monthIdx);
+            this._dateList.scrollToView(dateIdx);
+        }
+        updateDateList() {
+            if (this._currentMonth == 2) {
+                if (this._currentYear % 4 == 0) {
+                    this._dateList.numItems = 29;
+                    this._dateTotalCount = 29;
+                }
+                else {
+                    this._dateList.numItems = 28;
+                    this._dateTotalCount = 28;
+                }
+            }
+            else if (this._currentMonth == 1 || this._currentMonth == 3 || this._currentMonth == 5 || this._currentMonth == 7 || this._currentMonth == 10 || this._currentMonth == 12) {
+                this._dateList.numItems = 31;
+                this._dateTotalCount = 31;
+            }
+            else {
+                this._dateList.numItems = 30;
+                this._dateTotalCount = 30;
+            }
+            if (this._currentDate > 0) {
+                if (this._currentDate > this._dateList.numItems) {
+                    console.log(this._dateTotalCount - this._listRow + 1);
+                    this._dateList.scrollToView(this._dateTotalCount - this._listRow + 1);
+                }
+                else {
+                    let dateIdx = this._currentDate - this._listRow >= 0 ? this._currentDate - this._listRow : this._dateTotalCount + this._currentDate - this._listRow;
+                    console.log("dateIdx" + dateIdx);
+                    this._dateList.scrollToView(dateIdx);
+                }
+                this.dateOnScroll();
+            }
+        }
+        updateDateText() {
+            console.log(this._currentYear, this._currentMonth, this._currentDate);
+            Laya.stage.event("set_date", [this._currentYear, this._currentMonth, this._currentDate]);
         }
         show() {
             this.getTransition("show").play();
@@ -288,9 +348,15 @@
             fgui.GRoot.inst.addChild(this._view);
             this._btn = this._view.getChild("n1").asButton;
             this._btn.onClick(this, this.show);
+            this._dateText = this._view.getChild("n2").asTextField;
+            Laya.stage.on("set_date", this, this.updateDate);
+            Laya.stage.event("dataPicker_init");
         }
         show() {
             Laya.stage.event("date_show");
+        }
+        updateDate(year, month, day) {
+            this._dateText.setVar("year", year + "").setVar("month", month + "").setVar("date", day + "").flushVars();
         }
         destroy() {
             this._btn.offClick(this, this.show);
