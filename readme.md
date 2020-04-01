@@ -5,8 +5,8 @@
 ## 案例列表
 | 标题                                                                                 |               详情                |
 | :----------------------------------------------------------------------------------- | :-------------------------------: |
-| [刮刮卡](https://krapnikkk.github.io/FGUIProject/bin/index.html?name=ScratchCard)    | [查看](./src/demo/ScratchCard.ts) |
-| [日期选择](https://krapnikkk.github.io/FGUIProject/bin/index.html?name=DatePicker) | [查看](./src/demo/DatePicker.ts)  |
+| [刮刮卡](https://krapnikkk.github.io/FGUIProject/bin/index.html?name=ScratchCard)    | [查看](./src/demo/ScratchCardDemo.ts) |
+| [日期选择](https://krapnikkk.github.io/FGUIProject/bin/index.html?name=DatePicker) | [查看](./src/demo/DatePickerDemo.ts)  |
 | [表情聊天](https://krapnikkk.github.io/FGUIProject/bin/index.html?name=ChatDemo)     |  [查看](./src/demo/ChatDemo.ts)   |
 
 
