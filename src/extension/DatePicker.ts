@@ -41,10 +41,11 @@ export default class DatePicker extends fgui.GComponent {
         this._yearList.on(fgui.Events.SCROLL, this, this.yearOnScroll);
 
         this._monthList = this.getChild("month_list").asList;
+        this._monthList.on(fgui.Events.SCROLL, this, this.monthOnScroll);
         this._monthList.setVirtualAndLoop();
         this._monthList.itemRenderer = Laya.Handler.create(this, this.renderMonthListItem, null, false);
         this._monthList.numItems = this._monthTotalCount;
-        this._monthList.on(fgui.Events.SCROLL, this, this.monthOnScroll);
+
 
         this._dateList = this.getChild("date_list").asList;
         this._dateList.setVirtualAndLoop();
@@ -93,12 +94,21 @@ export default class DatePicker extends fgui.GComponent {
 
     public setDate(year: number, month: number, date: number) {
         year -= this._startYear;
-        let yearIdx = year - this._listRow >= 0 ? year - this._listRow : this._yearTotalCount + year - this._listRow,
-            monthIdx = month - this._listRow >= 0 ? month - this._listRow : this._monthTotalCount + month - this._listRow,
-            dateIdx = date - this._listRow >= 0 ? date - this._listRow : this._dateTotalCount + date - this._listRow;
+        let yearIdx = year - this._listRow >= 0 ? year - this._listRow : this._yearTotalCount + year - this._listRow;
         this._yearList.scrollToView(yearIdx);
+        let monthIdx = month - this._listRow >= 0 ? month - this._listRow : this._monthTotalCount + month - this._listRow;
         this._monthList.scrollToView(monthIdx);
+        let dateIdx = date - this._listRow >= 0 ? date - this._listRow : this._dateTotalCount + date - this._listRow;   
         this._dateList.scrollToView(dateIdx);
+        if (yearIdx == 0) {
+            this.yearOnScroll();
+        }
+        if (monthIdx == 0) {
+            this.monthOnScroll();
+        }
+        if (dateIdx == 0) {
+            this.dateOnScroll();
+        }
     }
 
     updateDateList() {

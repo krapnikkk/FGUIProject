@@ -105,10 +105,10 @@
             this._yearList.numItems = this._yearCount;
             this._yearList.on(fgui.Events.SCROLL, this, this.yearOnScroll);
             this._monthList = this.getChild("month_list").asList;
+            this._monthList.on(fgui.Events.SCROLL, this, this.monthOnScroll);
             this._monthList.setVirtualAndLoop();
             this._monthList.itemRenderer = Laya.Handler.create(this, this.renderMonthListItem, null, false);
             this._monthList.numItems = this._monthTotalCount;
-            this._monthList.on(fgui.Events.SCROLL, this, this.monthOnScroll);
             this._dateList = this.getChild("date_list").asList;
             this._dateList.setVirtualAndLoop();
             this._dateList.itemRenderer = Laya.Handler.create(this, this.renderDateListItem, null, false);
@@ -144,15 +144,25 @@
         dateOnScroll() {
             let nowIndex = this._dateList.getFirstChildInView();
             this._currentDate = nowIndex + this._listRow > this._dateTotalCount ? this._listRow + nowIndex - this._dateTotalCount : this._listRow + nowIndex;
-            console.log("dateOnScroll:" + this._currentDate);
             this.updateDateText();
         }
         setDate(year, month, date) {
             year -= this._startYear;
-            let yearIdx = year - this._listRow >= 0 ? year - this._listRow : this._yearTotalCount + year - this._listRow, monthIdx = month - this._listRow >= 0 ? month - this._listRow : this._monthTotalCount + month - this._listRow, dateIdx = date - this._listRow >= 0 ? date - this._listRow : this._dateTotalCount + date - this._listRow;
+            let yearIdx = year - this._listRow >= 0 ? year - this._listRow : this._yearTotalCount + year - this._listRow;
             this._yearList.scrollToView(yearIdx);
+            let monthIdx = month - this._listRow >= 0 ? month - this._listRow : this._monthTotalCount + month - this._listRow;
             this._monthList.scrollToView(monthIdx);
+            let dateIdx = date - this._listRow >= 0 ? date - this._listRow : this._dateTotalCount + date - this._listRow;
             this._dateList.scrollToView(dateIdx);
+            if (yearIdx == 0) {
+                this.yearOnScroll();
+            }
+            if (monthIdx == 0) {
+                this.monthOnScroll();
+            }
+            if (dateIdx == 0) {
+                this.dateOnScroll();
+            }
         }
         updateDateList() {
             if (this._currentMonth == 2) {
@@ -175,19 +185,16 @@
             }
             if (this._currentDate > 0) {
                 if (this._currentDate > this._dateList.numItems) {
-                    console.log(this._dateTotalCount - this._listRow + 1);
                     this._dateList.scrollToView(this._dateTotalCount - this._listRow + 1);
                 }
                 else {
                     let dateIdx = this._currentDate - this._listRow >= 0 ? this._currentDate - this._listRow : this._dateTotalCount + this._currentDate - this._listRow;
-                    console.log("dateIdx" + dateIdx);
                     this._dateList.scrollToView(dateIdx);
                 }
                 this.dateOnScroll();
             }
         }
         updateDateText() {
-            console.log(this._currentYear, this._currentMonth, this._currentDate);
             Laya.stage.event("set_date", [this._currentYear, this._currentMonth, this._currentDate]);
         }
         show() {
