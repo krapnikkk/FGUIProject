@@ -41,10 +41,10 @@ export default class DatePicker extends fgui.GComponent {
         this._yearList.on(fgui.Events.SCROLL, this, this.yearOnScroll);
 
         this._monthList = this.getChild("month_list").asList;
-        this._monthList.on(fgui.Events.SCROLL, this, this.monthOnScroll);
         this._monthList.setVirtualAndLoop();
         this._monthList.itemRenderer = Laya.Handler.create(this, this.renderMonthListItem, null, false);
         this._monthList.numItems = this._monthTotalCount;
+        this._monthList.on(fgui.Events.SCROLL, this, this.monthOnScroll);
 
 
         this._dateList = this.getChild("date_list").asList;

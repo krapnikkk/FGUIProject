@@ -105,10 +105,10 @@
             this._yearList.numItems = this._yearCount;
             this._yearList.on(fgui.Events.SCROLL, this, this.yearOnScroll);
             this._monthList = this.getChild("month_list").asList;
-            this._monthList.on(fgui.Events.SCROLL, this, this.monthOnScroll);
             this._monthList.setVirtualAndLoop();
             this._monthList.itemRenderer = Laya.Handler.create(this, this.renderMonthListItem, null, false);
             this._monthList.numItems = this._monthTotalCount;
+            this._monthList.on(fgui.Events.SCROLL, this, this.monthOnScroll);
             this._dateList = this.getChild("date_list").asList;
             this._dateList.setVirtualAndLoop();
             this._dateList.itemRenderer = Laya.Handler.create(this, this.renderDateListItem, null, false);
@@ -137,6 +137,7 @@
         }
         monthOnScroll() {
             let nowIndex = this._monthList.getFirstChildInView();
+            console.log(nowIndex);
             this._currentMonth = nowIndex + this._listRow > this._monthTotalCount ? this._listRow + nowIndex - this._monthTotalCount : this._listRow + nowIndex;
             this.updateDateList();
             this.updateDateText();
