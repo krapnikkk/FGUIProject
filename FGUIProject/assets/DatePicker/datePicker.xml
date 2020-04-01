@@ -5,7 +5,7 @@
     <graph id="n4_10ett" name="bg" xy="69,319" size="668,280" group="n13_dr4l" type="rect" lineSize="0" corner="18,18,0,0">
       <relation target="" sidePair="center-center,middle-middle,bottom-bottom"/>
     </graph>
-    <graph id="n6_10ett" name="n6" xy="69,442" size="668,35" group="n13_dr4l" type="rect" lineSize="2" lineColor="#ffebebeb" fillColor="#fff5f5f5">
+    <graph id="n6_10ett" name="n6" xy="69,457" size="668,35" group="n13_dr4l" type="rect" lineSize="2" lineColor="#ffebebeb" fillColor="#fff5f5f5">
       <relation target="n4_10ett" sidePair="width-width,middle-middle,top-top"/>
     </graph>
     <text id="n7_10ett" name="n7" xy="350,331" size="107,20" group="n13_dr4l" font="DFPHaiBaoW12-GB" fontSize="16" bold="true" text="选择出生日期">
@@ -17,14 +17,25 @@
     <component id="n9_10ett" name="n9" src="10ett6" fileName="btn_comfirm.xml" xy="684,328" group="n13_dr4l">
       <relation target="n4_10ett" sidePair="right-right,top-top"/>
     </component>
-    <list id="n1_10ett" name="year_list" xy="136,349" size="86,247" group="n13_dr4l" overflow="scroll" scrollBarFlags="2" defaultItem="ui://hf9z2x8idr4lt8" align="center" vAlign="middle" autoClearItems="true">
+    <list id="n1_10ett" name="year_list" xy="136,365" size="86,220" group="n13_dr4l" overflow="scroll" scrollBarFlags="82" defaultItem="ui://hf9z2x8idr4lt8" align="center" vAlign="middle" autoClearItems="true">
       <relation target="n4_10ett" sidePair="center-center,middle-middle,top-top"/>
     </list>
-    <list id="n10_10ett" name="date_list" xy="582,349" size="86,247" group="n13_dr4l" overflow="scroll" scrollBarFlags="2" defaultItem="ui://hf9z2x8idr4lt8" align="center" vAlign="middle" autoClearItems="true">
+    <list id="n10_10ett" name="date_list" xy="582,365" size="86,220" group="n13_dr4l" overflow="scroll" scrollBarFlags="82" defaultItem="ui://hf9z2x8idr4lt8" align="center" vAlign="middle" autoClearItems="true">
       <relation target="n4_10ett" sidePair="center-center,middle-middle,top-top"/>
     </list>
-    <list id="n11_10ett" name="month_list" xy="359,349" size="86,247" group="n13_dr4l" overflow="scroll" scrollBarFlags="2" defaultItem="ui://hf9z2x8idr4lt8" align="center" vAlign="middle" autoClearItems="true">
+    <list id="n11_10ett" name="month_list" xy="359,365" size="86,220" group="n13_dr4l" overflow="scroll" scrollBarFlags="82" defaultItem="ui://hf9z2x8idr4lt8" align="center" vAlign="middle" autoClearItems="true">
       <relation target="n4_10ett" sidePair="center-center,middle-middle,top-top"/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
     </list>
     <group id="n13_dr4l" name="n13" xy="69,319" size="668,280" advanced="true">
       <relation target="" sidePair="center-center,middle-middle,bottom-bottom"/>
