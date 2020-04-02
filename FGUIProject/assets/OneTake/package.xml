@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="uxraao66">
+  <resources>
+    <component id="uf7w0" name="Main.xml" path="/" exported="true"/>
+    <movieclip id="uf7w1" name="loading.jta" path="/"/>
+    <image id="5arr2" name="3.png" path="/src/"/>
+    <image id="5arr3" name="2.png" path="/src/"/>
+    <image id="5arr4" name="1.png" path="/src/"/>
+    <image id="5arr5" name="0.png" path="/src/"/>
+    <image id="5arr6" name="%.png" path="/src/"/>
+    <image id="5arr7" name="9.png" path="/src/"/>
+    <image id="5arr8" name="8.png" path="/src/"/>
+    <image id="5arr9" name="7.png" path="/src/"/>
+    <image id="5arra" name="6.png" path="/src/"/>
+    <image id="5arrb" name="5.png" path="/src/"/>
+    <image id="5arrc" name="4.png" path="/src/"/>
+    <font id="5arrd" name="number.fnt" path="/" exported="true"/>
+    <image id="rpzee" name="assets_atlas_NP_0.png" path="/"/>
+    <image id="rpzej" name="assets_atlas_NP_21.png" path="/"/>
+    <image id="rpzek" name="assets_atlas_NP_20.png" path="/"/>
+    <image id="rpzel" name="assets_atlas_NP_1.png" path="/"/>
+    <movieclip id="rpze17" name="fire.jta" path="/"/>
+    <movieclip id="rpze19" name="castle.jta" path="/"/>
+    <image id="rpze1a" name="title.png" path="/"/>
+  </resources>
+  <publish name=""/>
+</packageDescription>

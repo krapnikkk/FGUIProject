@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334">
+  <displayList>
+    <image id="n1_rpze" name="n1" src="rpzee" fileName="assets_atlas_NP_0.png" xy="0,0"/>
+    <image id="n2_rpze" name="n2" src="rpzel" fileName="assets_atlas_NP_1.png" xy="0,1400"/>
+    <image id="n3_rpze" name="n3" src="rpzek" fileName="assets_atlas_NP_20.png" xy="0,2800"/>
+    <image id="n4_rpze" name="n4" src="rpzej" fileName="assets_atlas_NP_21.png" xy="0,4200"/>
+    <movieclip id="n6_rpze" name="n6" src="rpze19" fileName="castle.jta" xy="176,1471"/>
+    <image id="n7_rpze" name="n7" src="rpze1a" fileName="title.png" xy="13,513"/>
+    <movieclip id="n8_rpze" name="n8" src="rpze17" fileName="fire.jta" xy="0,0" alpha="0.5"/>
+    <graph id="n9_rpze" name="n9" xy="191,0" size="563,1334" type="polygon" lineColor="#00000000" fillColor="#ffba0304" points="0,0,563,0,560,1334,5,100"/>
+  </displayList>
+  <transition name="t0"/>
+</component>
