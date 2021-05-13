@@ -8,6 +8,7 @@
 | [刮刮卡](https://krapnikkk.github.io/FGUIProject/bin/index.html?name=ScratchCard)    | [查看](./src/demo/ScratchCardDemo.ts) |
 | [日期选择](https://krapnikkk.github.io/FGUIProject/bin/index.html?name=DatePicker) | [查看](./src/demo/DatePickerDemo.ts)  |
 | [表情聊天](https://krapnikkk.github.io/FGUIProject/bin/index.html?name=ChatDemo)     |  [查看](./src/demo/ChatDemo.ts)   |
+| [加载字体](https://krapnikkk.github.io/FGUIProject/bin/index.html?name=LoadFont)     |  [查看](./src/demo/LoadFontDemo.ts)   |
 
 
 [/placeholder]:p
