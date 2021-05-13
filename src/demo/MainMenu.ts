@@ -1,6 +1,7 @@
 import ScratchCardDemo from "./ScratchCardDemo";
 import ChatDemo from "./ChatDemo";
 import DatePickerDemo from "./DatePickerDemo";
+import LoadFontDemo from "./LoadFontDemo";
 
 export default class MainMenu {
     private _view: fgui.GComponent;
@@ -22,6 +23,9 @@ export default class MainMenu {
         });
         this._view.getChild("n3").onClick(this, function () {
             this.startDemo(ChatDemo);
+        });
+        this._view.getChild("n4").onClick(this, function () {
+            this.startDemo(LoadFontDemo);
         });
         
         var reg: Function = Laya.ClassUtils.regClass;

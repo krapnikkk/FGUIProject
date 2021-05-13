@@ -13225,8 +13225,12 @@ window.fairygui = window.fgui;
                         completeHandler.run();
                     }));
                 }
-                else
+                else{
+                    UIPackage._instById[pkg.id] = pkg;
+                    UIPackage._instByName[pkg.name] = pkg;
                     completeHandler.run();
+                }
+                
             });
             fgui.AssetProxy.inst.load(url, descCompleteHandler, null, Laya.Loader.BUFFER);
         }
