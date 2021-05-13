@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1136,640">
+  <displayList>
+    <graph id="n3_uvpf" name="bg" xy="-392,-220" size="1920,1080" type="rect" lineSize="0" fillColor="#ff333333">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <text id="n1_uvpf" name="title" xy="426,56" size="284,74" font="ui://j07d2ugquvpf1" fontSize="56" text="站酷快乐体"/>
+    <text id="n0_uvpf" name="n0" xy="112,194" size="879,140" fontSize="34" autoSize="none" text="使用非系统字体前需加载字体并应用，另外资源包中的字体文件不需要发布，仅用作预览和名字标记"/>
+    <component id="n5_uvpf" name="btn_compress" src="uvpf2" fileName="compress.xml" xy="418,424"/>
+    <component id="n4_uvpf" name="btn_bmfont" src="uvpf3" fileName="bmfont.xml" xy="418,534"/>
+  </displayList>
+</component>

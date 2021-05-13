@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="j07d2ugq">
+  <resources>
+    <component id="uvpf0" name="Main.xml" path="/" exported="true"/>
+    <font id="uvpf1" name="customFont.ttf" path="/" renderMode="" samplePointSize="16"/>
+    <component id="uvpf2" name="compress.xml" path="/"/>
+    <component id="uvpf3" name="bmfont.xml" path="/"/>
+  </resources>
+  <publish name="LoadFont"/>
+</packageDescription>
