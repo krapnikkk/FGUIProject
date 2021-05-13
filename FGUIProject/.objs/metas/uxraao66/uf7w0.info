@@ -1,8 +1,8 @@
 {
-	"objectStatus": {
-		"n8_rpze": {
-			"hidden": true,
-			"locked": true
-		}
-	}
+  "objectStatus": {
+    "n8_rpze": {
+      "locked": true,
+      "hidden": true
+    }
+  }
 }
