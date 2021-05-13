@@ -32,6 +32,7 @@ export default class MainMenu {
         reg("ScratchCard",ScratchCardDemo);
         reg("ChatDemo",ChatDemo);
         reg("DatePicker",DatePickerDemo);
+        reg("LoadFontDemo",LoadFontDemo);
         let demoName = this.getQueryString("name");
         if(demoName){
             this.startDemo(Laya.ClassUtils.getRegClass(demoName));
