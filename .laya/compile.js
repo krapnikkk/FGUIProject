@@ -1,4 +1,4 @@
-// v1.2.1
+// v1.2.6
 //是否使用IDE自带的node环境和插件，设置false后，则使用自己环境(使用命令行方式执行)
 const useIDENode = process.argv[0].indexOf("LayaAir") > -1 ? true : false;
 const useCMDNode = process.argv[1].indexOf("layaair2-cmd") > -1 ? true : false;
@@ -14,6 +14,8 @@ const gulp = require(ideModuleDir + "gulp");
 const rollup = require(ideModuleDir + "rollup");
 const typescript = require(ideModuleDir + 'rollup-plugin-typescript2');//typescript2 plugin
 const glsl = require(ideModuleDir + 'rollup-plugin-glsl');
+const path = require('path');
+const fs = require('fs');
 
 // 如果是发布时调用编译功能，增加prevTasks
 let prevTasks = "";
@@ -23,12 +25,13 @@ if (global.publish) {
 
 gulp.task("compile", prevTasks, function () {
 	// 发布时调用编译功能，判断是否点击了编译选项
-	if (global.publish && !global.config.compile) {
-		return;
-	} else if (global.publish && global.config.compile) {
-		// 发布时调用编译，workSpaceDir使用publish.js里的变量
-		workSpaceDir = global.workSpaceDir;
-	}
+    if (global.publish) {
+        workSpaceDir = global.workSpaceDir; // 发布时调用编译，workSpaceDir使用publish.js里的变量
+        let forceCompile = !fs.existsSync(path.join(workSpaceDir, "bin", "js", "bundle.js")); // 发布时，并且没有编译过，则强制编译
+        if (!global.config.compile && !forceCompile) {
+            return;
+        }
+    }
 
 	return rollup.rollup({
 		input: workSpaceDir + '/src/Main.ts',
@@ -49,7 +52,7 @@ gulp.task("compile", prevTasks, function () {
 			glsl({
 				// By default, everything gets included
 				include: /.*(.glsl|.vs|.fs)$/,
-				sourceMap: true,
+				sourceMap: false,
 				compress:false
 			}),
 			/*terser({
@@ -64,10 +67,9 @@ gulp.task("compile", prevTasks, function () {
 			file: workSpaceDir + '/bin/js/bundle.js',
 			format: 'iife',
 			name: 'laya',
-			sourcemap: true
+			sourcemap: false
 		});
 	}).catch(err=>{
-			console.log(err);
-		
-	})
+		console.log(err);
+	});
 });

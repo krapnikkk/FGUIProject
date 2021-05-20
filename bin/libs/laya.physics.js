@@ -307,7 +307,7 @@ goog.exportProperty(box2d.b2BroadPhase.prototype,"ShiftOrigin",box2d.b2BroadPhas
 box2d.b2BroadPhase.prototype.UpdatePairs=function(a){for(var b=this.m_pairCount=0;b<this.m_moveCount;++b){var c=this.m_moveBuffer[b];if(null!==c){var d=this,e=this.m_tree.GetFatAABB(c);this.m_tree.Query(function(a){if(a.m_id===c.m_id)return!0;d.m_pairCount===d.m_pairBuffer.length&&(d.m_pairBuffer[d.m_pairCount]=new box2d.b2Pair);var b=d.m_pairBuffer[d.m_pairCount];a.m_id<c.m_id?(b.proxyA=a,b.proxyB=c):(b.proxyA=c,b.proxyB=a);++d.m_pairCount;return!0},e)}}this.m_moveCount=0;this.m_pairBuffer.length=
 this.m_pairCount;this.m_pairBuffer.sort(box2d.b2PairLessThan);for(b=0;b<this.m_pairCount;){var e=this.m_pairBuffer[b],f=this.m_tree.GetUserData(e.proxyA),g=this.m_tree.GetUserData(e.proxyB);a.AddPair(f,g);for(++b;b<this.m_pairCount;){f=this.m_pairBuffer[b];if(f.proxyA.m_id!==e.proxyA.m_id||f.proxyB.m_id!==e.proxyB.m_id)break;++b}}};goog.exportProperty(box2d.b2BroadPhase.prototype,"UpdatePairs",box2d.b2BroadPhase.prototype.UpdatePairs);
 box2d.b2BroadPhase.prototype.Query=function(a,b){this.m_tree.Query(a,b)};goog.exportProperty(box2d.b2BroadPhase.prototype,"Query",box2d.b2BroadPhase.prototype.Query);box2d.b2BroadPhase.prototype.RayCast=function(a,b){this.m_tree.RayCast(a,b)};goog.exportProperty(box2d.b2BroadPhase.prototype,"RayCast",box2d.b2BroadPhase.prototype.RayCast);box2d.b2BroadPhase.prototype.BufferMove=function(a){this.m_moveBuffer[this.m_moveCount]=a;++this.m_moveCount};
-goog.exportProperty(box2d.b2BroadPhase.prototype,"BufferMove",box2d.b2BroadPhase.prototype.BufferMove);box2d.b2BroadPhase.prototype.UnBufferMove=function(a){a=this.m_moveBuffer.indexOf(a);this.m_moveBuffer[a]=null};goog.exportProperty(box2d.b2BroadPhase.prototype,"UnBufferMove",box2d.b2BroadPhase.prototype.UnBufferMove);box2d.b2PairLessThan=function(a,b){return a.proxyA.m_id===b.proxyA.m_id?a.proxyB.m_id-b.proxyB.m_id:a.proxyA.m_id-b.proxyA.m_id};box2d.b2MassData=function(){this.center=new box2d.b2Vec2(0,0)};goog.exportSymbol("box2d.b2MassData",box2d.b2MassData);box2d.b2MassData.prototype.mass=0;goog.exportProperty(box2d.b2MassData.prototype,"mass",box2d.b2MassData.prototype.mass);box2d.b2MassData.prototype.center=null;goog.exportProperty(box2d.b2MassData.prototype,"center",box2d.b2MassData.prototype.center);box2d.b2MassData.prototype.I=0;goog.exportProperty(box2d.b2MassData.prototype,"I",box2d.b2MassData.prototype.I);
+goog.exportProperty(box2d.b2BroadPhase.prototype,"BufferMove",box2d.b2BroadPhase.prototype.BufferMove);box2d.b2BroadPhase.prototype.UnBufferMove=function(a){for (var i=0;i<this.m_moveBuffer.length;++i){if(this.m_moveBuffer[i]==a){this.m_moveBuffer[i]=null}}};goog.exportProperty(box2d.b2BroadPhase.prototype,"UnBufferMove",box2d.b2BroadPhase.prototype.UnBufferMove);box2d.b2PairLessThan=function(a,b){return a.proxyA.m_id===b.proxyA.m_id?a.proxyB.m_id-b.proxyB.m_id:a.proxyA.m_id-b.proxyA.m_id};box2d.b2MassData=function(){this.center=new box2d.b2Vec2(0,0)};goog.exportSymbol("box2d.b2MassData",box2d.b2MassData);box2d.b2MassData.prototype.mass=0;goog.exportProperty(box2d.b2MassData.prototype,"mass",box2d.b2MassData.prototype.mass);box2d.b2MassData.prototype.center=null;goog.exportProperty(box2d.b2MassData.prototype,"center",box2d.b2MassData.prototype.center);box2d.b2MassData.prototype.I=0;goog.exportProperty(box2d.b2MassData.prototype,"I",box2d.b2MassData.prototype.I);
 box2d.b2ShapeType={e_unknown:-1,e_circleShape:0,e_edgeShape:1,e_polygonShape:2,e_chainShape:3,e_shapeTypeCount:4};goog.exportSymbol("box2d.b2ShapeType",box2d.b2ShapeType);goog.exportProperty(box2d.b2ShapeType,"e_unknown",box2d.b2ShapeType.e_unknown);goog.exportProperty(box2d.b2ShapeType,"e_circleShape",box2d.b2ShapeType.e_circleShape);goog.exportProperty(box2d.b2ShapeType,"e_edgeShape",box2d.b2ShapeType.e_edgeShape);goog.exportProperty(box2d.b2ShapeType,"e_polygonShape",box2d.b2ShapeType.e_polygonShape);
 goog.exportProperty(box2d.b2ShapeType,"e_chainShape",box2d.b2ShapeType.e_chainShape);goog.exportProperty(box2d.b2ShapeType,"e_shapeTypeCount",box2d.b2ShapeType.e_shapeTypeCount);box2d.b2Shape=function(a,b){this.m_type=a;this.m_radius=b};goog.exportSymbol("box2d.b2Shape",box2d.b2Shape);box2d.b2Shape.prototype.m_type=box2d.b2ShapeType.e_unknown;goog.exportProperty(box2d.b2Shape.prototype,"m_type",box2d.b2Shape.prototype.m_type);box2d.b2Shape.prototype.m_radius=0;
 goog.exportProperty(box2d.b2Shape.prototype,"m_radius",box2d.b2Shape.prototype.m_radius);box2d.b2Shape.prototype.Clone=function(){box2d.ENABLE_ASSERTS&&box2d.b2Assert(!1);return null};goog.exportProperty(box2d.b2Shape.prototype,"Clone",box2d.b2Shape.prototype.Clone);box2d.b2Shape.prototype.Copy=function(a){box2d.ENABLE_ASSERTS&&box2d.b2Assert(this.m_type===a.m_type);this.m_radius=a.m_radius;return this};goog.exportProperty(box2d.b2Shape.prototype,"Copy",box2d.b2Shape.prototype.Copy);
@@ -839,7 +839,7 @@ box2d.b2World.prototype.AddController=function(a){box2d.ENABLE_ASSERTS&&box2d.b2
 box2d.b2World.prototype.RemoveController=function(a){box2d.ENABLE_ASSERTS&&box2d.b2Assert(a.m_world===this,"Controller is not a member of this world");a.m_prev&&(a.m_prev.m_next=a.m_next);a.m_next&&(a.m_next.m_prev=a.m_prev);this.m_controllerList===a&&(this.m_controllerList=a.m_next);--this.m_controllerCount;a.m_prev=null;a.m_next=null;a.m_world=null};goog.exportProperty(box2d.b2World.prototype,"RemoveController",box2d.b2World.prototype.RemoveController);box2d.b2MotorJointDef=function(){box2d.b2JointDef.call(this,box2d.b2JointType.e_motorJoint);this.linearOffset=new box2d.b2Vec2(0,0)};goog.inherits(box2d.b2MotorJointDef,box2d.b2JointDef);goog.exportSymbol("box2d.b2MotorJointDef",box2d.b2MotorJointDef);box2d.b2MotorJointDef.prototype.linearOffset=null;goog.exportProperty(box2d.b2MotorJointDef.prototype,"linearOffset",box2d.b2MotorJointDef.prototype.linearOffset);box2d.b2MotorJointDef.prototype.angularOffset=0;
 goog.exportProperty(box2d.b2MotorJointDef.prototype,"angularOffset",box2d.b2MotorJointDef.prototype.angularOffset);box2d.b2MotorJointDef.prototype.maxForce=1;goog.exportProperty(box2d.b2MotorJointDef.prototype,"maxForce",box2d.b2MotorJointDef.prototype.maxForce);box2d.b2MotorJointDef.prototype.maxTorque=1;goog.exportProperty(box2d.b2MotorJointDef.prototype,"maxTorque",box2d.b2MotorJointDef.prototype.maxTorque);box2d.b2MotorJointDef.prototype.correctionFactor=.3;
 goog.exportProperty(box2d.b2MotorJointDef.prototype,"correctionFactor",box2d.b2MotorJointDef.prototype.correctionFactor);box2d.b2MotorJointDef.prototype.Initialize=function(a,b){this.bodyA=a;this.bodyB=b;this.bodyA.GetLocalPoint(this.bodyB.GetPosition(),this.linearOffset);var c=this.bodyA.GetAngle();this.angularOffset=this.bodyB.GetAngle()-c};goog.exportProperty(box2d.b2MotorJointDef.prototype,"Initialize",box2d.b2MotorJointDef.prototype.Initialize);
-box2d.b2MotorJoint=function(a){box2d.b2Joint.call(this,a);this.m_linearOffset=a.linearOffset.Clone();this.m_linearImpulse=new box2d.b2Vec2(0,0);this.m_maxForce=a.maxForce;this.m_maxTorque=a.maxTorque;this.m_correctionFactor=a.correctionFactor;this.m_rA=new box2d.b2Vec2(0,0);this.m_rB=new box2d.b2Vec2(0,0);this.m_localCenterA=new box2d.b2Vec2(0,0);this.m_localCenterB=new box2d.b2Vec2(0,0);this.m_linearError=new box2d.b2Vec2(0,0);this.m_linearMass=new box2d.b2Mat22;this.m_qA=new box2d.b2Rot;this.m_qB=
+box2d.b2MotorJoint=function(a){box2d.b2Joint.call(this,a);this.m_linearOffset=a.linearOffset.Clone();this.m_angularOffset=a.angularOffset;this.m_linearImpulse=new box2d.b2Vec2(0,0);this.m_maxForce=a.maxForce;this.m_maxTorque=a.maxTorque;this.m_correctionFactor=a.correctionFactor;this.m_rA=new box2d.b2Vec2(0,0);this.m_rB=new box2d.b2Vec2(0,0);this.m_localCenterA=new box2d.b2Vec2(0,0);this.m_localCenterB=new box2d.b2Vec2(0,0);this.m_linearError=new box2d.b2Vec2(0,0);this.m_linearMass=new box2d.b2Mat22;this.m_qA=new box2d.b2Rot;this.m_qB=
 new box2d.b2Rot;this.m_K=new box2d.b2Mat22};goog.inherits(box2d.b2MotorJoint,box2d.b2Joint);goog.exportSymbol("box2d.b2MotorJoint",box2d.b2MotorJoint);box2d.b2MotorJoint.prototype.m_linearOffset=null;goog.exportProperty(box2d.b2MotorJoint.prototype,"m_linearOffset",box2d.b2MotorJoint.prototype.m_linearOffset);box2d.b2MotorJoint.prototype.m_angularOffset=0;goog.exportProperty(box2d.b2MotorJoint.prototype,"m_angularOffset",box2d.b2MotorJoint.prototype.m_angularOffset);
 box2d.b2MotorJoint.prototype.m_linearImpulse=null;goog.exportProperty(box2d.b2MotorJoint.prototype,"m_linearImpulse",box2d.b2MotorJoint.prototype.m_linearImpulse);box2d.b2MotorJoint.prototype.m_angularImpulse=0;goog.exportProperty(box2d.b2MotorJoint.prototype,"m_angularImpulse",box2d.b2MotorJoint.prototype.m_angularImpulse);box2d.b2MotorJoint.prototype.m_maxForce=0;goog.exportProperty(box2d.b2MotorJoint.prototype,"m_maxForce",box2d.b2MotorJoint.prototype.m_maxForce);
 box2d.b2MotorJoint.prototype.m_maxTorque=0;goog.exportProperty(box2d.b2MotorJoint.prototype,"m_maxTorque",box2d.b2MotorJoint.prototype.m_maxTorque);box2d.b2MotorJoint.prototype.m_correctionFactor=.3;goog.exportProperty(box2d.b2MotorJoint.prototype,"m_correctionFactor",box2d.b2MotorJoint.prototype.m_correctionFactor);box2d.b2MotorJoint.prototype.m_indexA=0;goog.exportProperty(box2d.b2MotorJoint.prototype,"m_indexA",box2d.b2MotorJoint.prototype.m_indexA);box2d.b2MotorJoint.prototype.m_indexB=0;
@@ -1581,7 +1581,7 @@ window.box2d=box2d;
         _onDestroy() {
             if (this.rigidBody) {
                 if (this.fixture) {
-                    if (this.fixture.GetBody() == this.rigidBody.body) {
+                    if (this.fixture.GetBody() == this.rigidBody._getOriBody()) {
                         this.rigidBody.body.DestroyFixture(this.fixture);
                     }
                     this.fixture = null;
@@ -1777,6 +1777,7 @@ window.box2d=box2d;
                 this.accessGetSetFunc(sp, "rotation", "set")(Laya.Utils.toAngle(ang) - sp.parent.globalRotation);
                 if (ang == 0) {
                     var point = sp.parent.globalToLocal(Laya.Point.TEMP.setTo(pos.x * IPhysics.Physics.PIXEL_RATIO + sp.pivotX, pos.y * IPhysics.Physics.PIXEL_RATIO + sp.pivotY), false, IPhysics.Physics.I.worldRoot);
+                    sp.parent.fromParentPoint(point);
                     this.accessGetSetFunc(sp, "x", "set")(point.x);
                     this.accessGetSetFunc(sp, "y", "set")(point.y);
                 }
@@ -1806,7 +1807,7 @@ window.box2d=box2d;
         }
         _onDisable() {
             Laya.Laya.physicsTimer.clear(this, this._sysPhysicToNode);
-            IPhysics.Physics.I._removeBody(this._body);
+            this._body && IPhysics.Physics.I._removeBody(this._body);
             this._body = null;
             var owner = this.owner;
             if (owner._changeByRigidBody) {
@@ -1821,6 +1822,9 @@ window.box2d=box2d;
         getBody() {
             if (!this._body)
                 this._onAwake();
+            return this._body;
+        }
+        _getOriBody() {
             return this._body;
         }
         get body() {
@@ -1970,6 +1974,18 @@ window.box2d=box2d;
     Laya.ClassUtils.regClass("laya.physics.RigidBody", RigidBody);
     Laya.ClassUtils.regClass("Laya.RigidBody", RigidBody);
 
+    class DestructionListener {
+        SayGoodbyeJoint(params) {
+            params.m_userData && (params.m_userData.isDestroy = true);
+        }
+        SayGoodbyeFixture(params) {
+        }
+        SayGoodbyeParticleGroup(params) {
+        }
+        SayGoodbyeParticle(params) {
+        }
+    }
+
     class Physics extends Laya.EventDispatcher {
         constructor() {
             super();
@@ -1992,11 +2008,12 @@ window.box2d=box2d;
                 options || (options = {});
                 var box2d = window.box2d;
                 if (box2d == null) {
-                    console.error("Can not find box2d libs, you should reuqest box2d.js first.");
+                    console.error("Can not find box2d libs, you should request box2d.js first.");
                     return;
                 }
                 var gravity = new box2d.b2Vec2(0, options.gravity || 500 / Physics.PIXEL_RATIO);
                 this.world = new box2d.b2World(gravity);
+                this.world.SetDestructionListener(new DestructionListener());
                 this.world.SetContactListener(new ContactListener());
                 this.allowSleeping = options.allowSleeping == null ? true : options.allowSleeping;
                 if (!options.customUpdate)
@@ -2079,7 +2096,10 @@ window.box2d=box2d;
         }
         _createJoint(def) {
             if (this.world) {
-                return this.world.CreateJoint(def);
+                let joint = this.world.CreateJoint(def);
+                joint.m_userData = {};
+                joint.m_userData.isDestroy = false;
+                return joint;
             }
             else {
                 console.error('The physical engine should be initialized first.use "Physics.enable()"');
@@ -2125,7 +2145,13 @@ window.box2d=box2d;
             this._worldRoot = value;
             if (value) {
                 var p = value.localToGlobal(Laya.Point.TEMP.setTo(0, 0));
-                this.world.ShiftOrigin({ x: p.x / Physics.PIXEL_RATIO, y: p.y / Physics.PIXEL_RATIO });
+                this.world.ShiftOrigin({ x: -p.x / Physics.PIXEL_RATIO, y: -p.y / Physics.PIXEL_RATIO });
+            }
+        }
+        updatePhysicsByWorldRoot() {
+            if (!!this.worldRoot) {
+                var p = this.worldRoot.localToGlobal(Laya.Point.TEMP.setTo(0, 0));
+                this.world.ShiftOrigin({ x: -p.x / Physics.PIXEL_RATIO, y: -p.y / Physics.PIXEL_RATIO });
             }
         }
     }
@@ -2559,10 +2585,10 @@ window.box2d=box2d;
         _createJoint() {
         }
         _onDisable() {
-            if (this._joint) {
+            if (this._joint && this._joint.m_userData && !this._joint.m_userData.isDestroy) {
                 Physics.I._removeJoint(this._joint);
-                this._joint = null;
             }
+            this._joint = null;
         }
     }
     Laya.ClassUtils.regClass("laya.physics.joint.JointBase", JointBase);
@@ -3181,6 +3207,7 @@ window.box2d=box2d;
     exports.ChainCollider = ChainCollider;
     exports.CircleCollider = CircleCollider;
     exports.ColliderBase = ColliderBase;
+    exports.DestructionListener = DestructionListener;
     exports.DistanceJoint = DistanceJoint;
     exports.GearJoint = GearJoint;
     exports.IPhysics = IPhysics;

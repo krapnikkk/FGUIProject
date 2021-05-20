@@ -1,19 +1,21 @@
-// v1.6.5
+// v1.8.6
 //是否使用IDE自带的node环境和插件，设置false后，则使用自己环境(使用命令行方式执行)
 const useIDENode = process.argv[0].indexOf("LayaAir") > -1 ? true : false;
 const useCMDNode = process.argv[1].indexOf("layaair2-cmd") > -1 ? true : false;
-
 function useOtherNode(){
 	return useIDENode||useCMDNode;
 }
 //获取Node插件和工作路径
-let ideModuleDir = useOtherNode() ? process.argv[1].replace("gulp\\bin\\gulp.js", "").replace("gulp/bin/gulp.js", "") : "";
-let workSpaceDir = useOtherNode() ? process.argv[2].replace("--gulpfile=", "").replace("\\.laya\\publish.js", "").replace("/.laya/publish.js", "") + "/" : "./../";
+const ideModuleDir = useOtherNode() ? process.argv[1].replace("gulp\\bin\\gulp.js", "").replace("gulp/bin/gulp.js", "") : "";
+const workSpaceDir = useOtherNode() ? process.argv[2].replace("--gulpfile=", "").replace("\\.laya\\publish.js", "").replace("/.laya/publish.js", "") + "/" : "./../";
+global.ideModuleDir = ideModuleDir;
+global.workSpaceDir = workSpaceDir;
 
 //引用插件模块
 const gulp = require(ideModuleDir + "gulp");
 const fs = require("fs");
 const path = require("path");
+const childProcess = require("child_process");
 const uglify = require(ideModuleDir + 'gulp-uglify-es').default;
 const jsonminify = require(ideModuleDir + "gulp-jsonminify");
 const image = require(ideModuleDir + "gulp-image");
@@ -24,12 +26,9 @@ const del = require(ideModuleDir + "del");
 const requireDir = require(ideModuleDir + 'require-dir');
 const babel = require(ideModuleDir + 'gulp-babel');
 
-global.ideModuleDir = ideModuleDir;
-global.workSpaceDir = workSpaceDir;
-
 // 结合compile.js使用
 global.publish = true;
-const fileList = ["compile.js", "publish_xmgame.js", "publish_oppogame.js", "publish_vivogame.js", "publish_alipaygame.js", "publish_wxgame.js", "publish_bdgame.js", "publish_qqgame.js"];
+const fileList = ["compile.js", "pub_utils.js", "publish_xmgame.js", "publish_oppogame.js", "publish_vivogame.js", "publish_biligame.js", "publish_alipaygame.js", "publish_wxgame.js", "publish_bdgame.js", "publish_qqgame.js", "publish_bytedancegame.js", "publish_hwgame.js", "publish_taobaominiapp.js"];
 requireDir('./', {
 	filter: function (fullPath) {
 		// 只用到了compile.js和publish.js
@@ -41,7 +40,7 @@ requireDir('./', {
 	}
 });
 
-const QUICKGAMELIST = ["xmgame", "oppogame", "vivogame"];
+const QUICKGAMELIST = ["xmgame", "oppogame", "vivogame", "hwgame"];
 
 // 清理临时文件夹，加载配置
 let config,
@@ -50,20 +49,29 @@ let config,
 	platform = "web",
 	isOpendataProj = false,
 	platformCopyTask = [],// 平台脚本拷贝任务
-	platformTask = []; // 平台需要执行的任务
+	platformTask = [], // 平台需要执行的任务
+	commandSuffix = ".cmd",
+	adbPath = "adb",
+	opensslPath = "openssl";
 //任务对照列表
 const copyTasks = {
+	"taobaominiapp": "preCreate_TBMini",
+	"hwgame": "copyPlatformFile_HW",
+	"bytedancegame": "copyPlatformFile_ByteDance",
 	"biligame": "copyPlatformFile_Bili",
 	"Alipaygame": "copyPlatformFile_Alipay",
 	"vivogame": "copyPlatformFile_VIVO",
-	"oppogame": "preCreate_OPPO",
+	"oppogame": "copyPlatformFile_OPPO",
 	"xmgame": "copyPlatformFile_XM",
 	"bdgame": "copyPlatformFile_BD",
 	"qqgame": "copyPlatformFile_QQ",
 	"wxgame": "copyPlatformFile_WX",
-	"web": "copyLibsJsFile"
+	"web": "copyPlatformLibsJsFile"
 }
 const tasks = {
+	"taobaominiapp": "buildTBMiniProj",
+	"hwgame": "buildHWProj",
+	"bytedancegame": "buildByteDanceProj",
 	"biligame": "buildBiliProj",
 	"Alipaygame": "buildAlipayProj",
 	"vivogame": "buildVivoProj",
@@ -72,7 +80,7 @@ const tasks = {
 	"bdgame": "buildBDProj",
 	"qqgame": "buildQQProj",
 	"wxgame": "buildWXProj",
-	"web": "packfile"
+	"web": "version2"
 }
 
 if (!useOtherNode() && process.argv.length > 5 && process.argv[4] == "--config") {
@@ -84,7 +92,7 @@ if (useOtherNode() && process.argv.length >= 4 && process.argv[3].startsWith("--
 	platformTask.push(tasks[platform]);
 }
 
-gulp.task("loadConfig", function () {
+gulp.task("loadConfig", function (cb) {
 	let _path;
 	if (!useOtherNode()) {
 		_path = platform + ".json";
@@ -99,7 +107,7 @@ gulp.task("loadConfig", function () {
 	global.platform = platform;
 	let file = fs.readFileSync(_path, "utf-8");
 	if (file) {
-		if (QUICKGAMELIST.includes(platform)) {
+		if ([...QUICKGAMELIST, "taobaominiapp"].includes(platform)) {
 			file = file.replace(/\$basePath/g, releaseDir + "/temprelease");
 		} else {
 			file = file.replace(/\$basePath/g, releaseDir);
@@ -117,6 +125,53 @@ gulp.task("loadConfig", function () {
 			isOpendataProj = projInfo.layaProType === 12;
 		} catch (e) {}
 	}
+	// 其他变量的初始化
+	let layarepublicPath = path.join(ideModuleDir, "../", "code", "layarepublic");
+	if (!fs.existsSync(layarepublicPath)) {
+		layarepublicPath = path.join(ideModuleDir, "../", "out", "layarepublic");
+	}
+	global.layarepublicPath = layarepublicPath;
+
+	if (process.platform === "darwin") {
+		commandSuffix = "";
+	}
+	global.commandSuffix = commandSuffix;
+
+	// 检查环境中是否存在adb和openssl
+	let otherLibsPath = path.join(layarepublicPath, "../", "vs", "layaEditor", "libs");
+	childProcess.exec("adb version", (error, stdout, stderr) => {
+		if (error) {
+			if (process.platform === "darwin") {
+				adbPath = path.join(otherLibsPath, "adb", "darwin", "adb");
+			} else {
+				adbPath = path.join(otherLibsPath, "adb", "win", "adb.exe");
+			}
+			adbPath = `"${adbPath}"`;
+		}
+		global.adbPath = adbPath;
+		if (global.opensslPath) {
+			cb();
+		}
+	});
+	childProcess.exec("openssl version", (error, stdout, stderr) => {
+		if (error) {
+			if (process.platform === "darwin") {
+				opensslPath = path.join(otherLibsPath, "openssl", "darwin", "bin", "openssl");
+			} else {
+				opensslPath = path.join(otherLibsPath, "openssl", "win", "bin", "openssl.exe");
+				let opensslCnfPath = path.join(otherLibsPath, "openssl", "win", "bin", "openssl.cfg");
+				// 特别的，当windows没有openssl时，需要额外的OPENSSL_CONF设置变量
+				// childProcess.execSync(`set OPENSSL_CONF=${opensslCnfPath}`);
+				process.env.OPENSSL_CONF = opensslCnfPath;
+				console.log("OPENSSL_CONF: " + childProcess.execSync("echo %OPENSSL_CONF%"));
+			}
+			opensslPath = `"${opensslPath}"`;
+		}
+		global.opensslPath = opensslPath;
+		if (global.adbPath) {
+			cb();
+		}
+	});
 });
 
 // 清理release文件夹
@@ -128,34 +183,44 @@ gulp.task("clearReleaseDir", ["compile"], function (cb) {
 		}
 		// 小米快游戏，使用即存的项目，删掉Laya工程文件，保留小米环境项目文件
 		if (platform === "xmgame") {
-			let xmProjSrc = path.join(releaseDir, config.xmInfo.projName);
-			// 不要删掉manifest.json/main.js文件
+			let xmProj = path.join(releaseDir, config.xmInfo.projName);
 			// 这里不是node-glob语法，详见: https://github.com/sindresorhus/del
-			delList = [`${xmProjSrc}/**`, `!${xmProjSrc}`, `!${xmProjSrc}/node_modules/**`, `!${xmProjSrc}/sign/**`, `!${xmProjSrc}/{babel.config.js,main.js,manifest.json,package.json,package-lock.json}`];
+			delList = [`${xmProj}/**`, `!${xmProj}`, `!${xmProj}/node_modules/**`, `!${xmProj}/sign/**`, `!${xmProj}/{babel.config.js,main.js,manifest.json,package.json,package-lock.json}`];
 		} else if (platform === "oppogame") {
 			let oppoProjSrc = path.join(releaseDir, config.oppoInfo.projName);
-			delList = [`${oppoProjSrc}/**`, `!${oppoProjSrc}`, `!${oppoProjSrc}/dist/**`, `!${oppoProjSrc}/{manifest.json}`];
+			delList = [`${oppoProjSrc}/**`, `!${oppoProjSrc}`, `!${oppoProjSrc}/{manifest.json,main.js}`];
 		} else if (platform === "vivogame") {
 			let vvProj = path.join(releaseDir, config.vivoInfo.projName);
 			let vvProjSrc = path.join(vvProj, "src");
-			// 不要删掉manifest.json/main.js文件
 			// 这里不是node-glob语法，详见: https://github.com/sindresorhus/del
-			delList = [`${vvProjSrc}/**`, `!${vvProjSrc}`, `!${vvProjSrc}/sign/**`, `!${vvProjSrc}/{game.js,manifest.json}`];
-			delList = delList.concat(`${vvProj}/engine/**`, `${vvProj}/config/**`);
+			delList = [`${vvProj}/engine/**`, `${vvProj}/laya-library/**`, `${vvProj}/config/**`,
+						`${vvProjSrc}/**`, `!${vvProjSrc}`, `!${vvProjSrc}/{game.js,manifest.json}`];
+		} else if (platform === "hwgame") {
+			let hwProjSrc = path.join(releaseDir, config.hwInfo.projName);
+			delList = [`${hwProjSrc}/**`, `!${hwProjSrc}`, `!${hwProjSrc}/{game.js,manifest.json}`];
 		}
 		// 保留平台配置文件
 		if (config.keepPlatformFile) {
-			if (platform === "wxgame" || platform === "qqgame") {
-				delList = delList.concat(`!${releaseDir}`, `!${releaseDir}/{game.js,game.json,project.config.json,weapp-adapter.js}`);
+			if (["wxgame", "qqgame", "Alipaygame", "bytedancegame"].includes(platform)) {
+				delList = delList.concat(`!${releaseDir}`, `!${releaseDir}/{game.js,game.json,project.config.json}`);
 			} else if (platform === "bdgame") {
-				delList = delList.concat(`!${releaseDir}`, `!${releaseDir}/{game.js,game.json,project.swan.json,swan-game-adapter.js}`);
-			} else if (platform === "Alipaygame") {
-				delList = delList.concat(`!${releaseDir}`, `!${releaseDir}/{game.js,game.json,my-adapter.js}`);
+				delList = delList.concat(`!${releaseDir}`, `!${releaseDir}/{game.js,game.json,project.swan.json}`);
+			} else if (platform === "biligame") {
+				delList = delList.concat(`!${releaseDir}`, `!${releaseDir}/{game.js,game.json}`);
+			} else if (platform === "taobaominiapp") { // 特殊的，淘宝平台，仅删除确定为我们的文件
+				// 删除 node_modules/layaengine/libs 下引擎文件，以及 node_modules/layaengine/laya.js 文件
+				// 删除 pages/index 下除 game.js,game.json,game.axml 外所有文件
+				// release/taobaominiapp/node_modules/layaengine/adapter.js 必更新
+				delList = [`${releaseDir}/node_modules/layaengine/libs`, `${releaseDir}/node_modules/layaengine/laya.js`,
+							// `${releaseDir}/node_modules/layaengine`, `!${releaseDir}/node_modules/layaengine`, `!${releaseDir}/node_modules/layaengine/{adapter.js,index.js/package.json}`,
+							`${releaseDir}/pages/index/**`, `!${releaseDir}/pages/index`, `!${releaseDir}/pages/index/{game.js,game.json,game.axml}`];
 			}
 		}
 		del(delList, { force: true }).then(paths => {
 			cb();
-		});
+		}).catch((err) => {
+			throw err;
+		})
 	} else cb();
 });
 
@@ -164,7 +229,7 @@ gulp.task("copyFile", ["clearReleaseDir"], function () {
 	let baseCopyFilter = [`${workSpaceDir}/bin/**/*.*`, `!${workSpaceDir}/bin/indexmodule.html`, `!${workSpaceDir}/bin/import/*.*`];
 	// 只拷贝index.js中引用的类库
 	if (config.onlyIndexJS) {
-		baseCopyFilter = baseCopyFilter.concat(`!${workSpaceDir}/bin/libs/*.*`);
+		baseCopyFilter = baseCopyFilter.concat(`!${workSpaceDir}/bin/libs/**/*.*`);
 	}
 	if (platform === "wxgame" && isOpendataProj) { // 开放域项目微信发布，仅拷贝用到的文件
 		config.copyFilesFilter = [`${workSpaceDir}/bin/js/bundle.js`, `${workSpaceDir}/bin/index.js`, `${workSpaceDir}/bin/game.js`];
@@ -172,20 +237,19 @@ gulp.task("copyFile", ["clearReleaseDir"], function () {
 			config.copyFilesFilter.push(`${workSpaceDir}/bin/libs/laya.opendata.js`);
 		}
 	} else if (platform === "wxgame") { // 微信项目，不拷贝index.html，不拷贝百度bin目录中的文件
-		config.copyFilesFilter = baseCopyFilter.concat([`!${workSpaceDir}/bin/index.html`, `!${workSpaceDir}/bin/{project.swan.json,swan-game-adapter.js}`]);
+		config.copyFilesFilter = baseCopyFilter.concat([`!${workSpaceDir}/bin/{project.swan.json,swan-game-adapter.js}`]);
 	} else if (platform === "bdgame") { // 百度项目，不拷贝index.html，不拷贝微信bin目录中的文件
-		config.copyFilesFilter = baseCopyFilter.concat([`!${workSpaceDir}/bin/index.html`, `!${workSpaceDir}/bin/{project.config.json,weapp-adapter.js}`]);
-	} else { // web|QQ项目|bili|快游戏，不拷贝微信、百度在bin目录中的文件
+		config.copyFilesFilter = baseCopyFilter.concat([`!${workSpaceDir}/bin/{project.config.json,weapp-adapter.js}`]);
+	} else { // 除微信、百度外，不拷贝微信、百度在bin目录中的文件
 		config.copyFilesFilter = baseCopyFilter.concat([`!${workSpaceDir}/bin/{game.js,game.json,project.config.json,weapp-adapter.js,project.swan.json,swan-game-adapter.js}`]);
 	}
 	// bili/alipay/qq，不拷贝index.html
-	if (["biligame", "Alipaygame", "qqgame"].includes(platform)) {
+	if (platform !== "web") {
 		config.copyFilesFilter = config.copyFilesFilter.concat([`!${workSpaceDir}/bin/index.html`]);
 	}
 	// 快游戏，需要新建一个快游戏项目，拷贝的只是项目的一部分，将文件先拷贝到文件夹的临时目录中去
-	if (QUICKGAMELIST.includes(platform)) {
-		config.copyFilesFilter = config.copyFilesFilter.concat([`!${workSpaceDir}/bin/index.html`]);
-		releaseDir = global.tempReleaseDir = path.join(releaseDir, "temprelease");
+	if ([...QUICKGAMELIST, "taobaominiapp"].includes(platform)) {
+		releaseDir = global.tempReleaseDir = path.join(releaseDir, "temprelease").replace(/\\/g, "/");
 	}
 	if (config.exclude) { // 排除文件
 		config.excludeFilter.forEach(function(item, index, list) {
@@ -199,8 +263,41 @@ gulp.task("copyFile", ["clearReleaseDir"], function () {
 	return stream.pipe(gulp.dest(releaseDir));
 });
 
+// 使用min版本引擎
+gulp.task("useMinJsLibs", ["copyFile"], function () {
+	if (!config.useMinJsLibs) {
+		return;
+	}
+	if (platform === "wxgame" && isOpendataProj) { // 开放域项目微信发布，拷贝文件时已经拷贝类库文件了
+		return;
+	}
+	// 开放域项目，as语言，没有libs目录，mac系统报错
+	let libs = path.join(workSpaceDir, "bin", "libs");
+	if (!fs.existsSync(libs)) {
+		return;
+	}
+	// 分析index.js
+	let indexJSPath = path.join(releaseDir, "index.js");
+	let indexJsContent = fs.readFileSync(indexJSPath, "utf8");
+	let libsList = indexJsContent.match(/loadLib\(['"]libs\/[\w-./]+\.(js|wasm)['"]\)/g);
+	if (!libsList) {
+		return;
+	}
+	let 
+		item,
+		libsName = "",
+		minLibsName = "";
+	for (let i = 0, len = libsList.length; i < len; i++) {
+		item = libsList[i];
+		libsName = item.match(/loadLib\(['"]libs\/([\w-./]+\.(js|wasm))['"]\)/);
+		minLibsName = `min/${libsName[1].replace(".js", ".min.js")}`;
+		indexJsContent = indexJsContent.replace(libsName[1], minLibsName);
+	}
+	fs.writeFileSync(indexJSPath, indexJsContent);
+});
+
 // copy libs中的js文件到release文件夹
-gulp.task("copyLibsJsFile", ["copyFile"], function () {
+gulp.task("copyLibsJsFile", ["useMinJsLibs"], function () {
 	if (!config.onlyIndexJS) {
 		return;
 	}
@@ -213,7 +310,7 @@ gulp.task("copyLibsJsFile", ["copyFile"], function () {
 		return;
 	}
 	// 分析index.js
-	let indexJSPath = path.join(workSpaceDir, "bin", "index.js");
+	let indexJSPath = path.join(releaseDir, "index.js");
 	let indexJsContent = fs.readFileSync(indexJSPath, "utf8");
 	let libsList = indexJsContent.match(/loadLib\(['"]libs\/[\w-./]+\.(js|wasm)['"]\)/g);
 	if (!libsList) {
@@ -230,7 +327,11 @@ gulp.task("copyLibsJsFile", ["copyFile"], function () {
 	}
 	// 发布web项目，如果使用了physics3D，默认拷贝runtime
 	if (platform === "web" && libsStr.includes("laya.physics3D")) {
-		libsStr += ',laya.physics3D.runtime.js';
+		if (config.useMinJsLibs) {
+			libsStr += ',min/laya.physics3D.runtime.min.js';
+		} else {
+			libsStr += ',laya.physics3D.runtime.js';
+		}
 	}
 	let copyLibsList = [`${workSpaceDir}/bin/libs/{${libsStr}}`];
 	if (!libsStr.includes(",")) {
@@ -240,14 +341,76 @@ gulp.task("copyLibsJsFile", ["copyFile"], function () {
 	return stream.pipe(gulp.dest(releaseDir));
 });
 
+gulp.task("copyPlatformLibsJsFile", ["copyLibsJsFile"], function () {
+	if (platform === "wxgame" && isOpendataProj) { // 开放域项目微信发布，拷贝文件时已经拷贝类库文件了
+		return;
+	}
+	// 开放域项目，as语言，没有libs目录，mac系统报错
+	let libs = path.join(workSpaceDir, "bin", "libs");
+	if (!fs.existsSync(libs)) {
+		return;
+	}
+	if (platform === "web") {
+		return;
+	}
+	
+	let platformLibName = "";
+	switch (platform) {
+		case "wxgame":
+			platformLibName = "laya.wxmini.js";
+			break;
+		case "qqgame":
+			platformLibName = "laya.qqmini.js";
+			break;
+		case "bdgame":
+			platformLibName = "laya.bdmini.js";
+			break;
+		case "Alipaygame":
+			platformLibName = "laya.Alipaymini.js";
+			break;
+		case "biligame":
+			platformLibName = "laya.bilimini.js";
+			break;
+		case "bytedancegame":
+			platformLibName = "laya.ttmini.js";
+			break;
+		case "oppogame":
+			platformLibName = "laya.quickgamemini.js";
+			break;
+		case "vivogame":
+			platformLibName = "laya.vvmini.js";
+			break;
+		case "xmgame":
+			platformLibName = "laya.xmmini.js";
+			break;
+		case "hwgame":
+			platformLibName = "laya.hwmini.js";
+			break;
+		case "taobaominiapp":
+			platformLibName = "laya.tbmini.js";
+			break;
+	}
+	let copyPath = `${workSpaceDir}/bin/libs`;
+	if (config.useMinJsLibs) {
+		platformLibName = platformLibName.replace(".js", ".min.js");
+		copyPath = path.join(copyPath, "min");
+	}
+	let copyLibPath = path.join(copyPath, platformLibName);
+	var stream = gulp.src(copyLibPath, { base: `${workSpaceDir}/bin` });
+	return stream.pipe(gulp.dest(releaseDir));
+});
+
 // es6toes5
 gulp.task("es6toes5", platformCopyTask, function() {
 	if (config.es6toes5) {
 		return gulp.src(`${releaseDir}/**/*.js`, { base: releaseDir })
 		.pipe(babel({
 			presets: ['@babel/env'],
-			compact: true
+			compact: false // 1) 为规避500K限制，不能为"auto" 2) 为便于调试，并防止开发者误解已经经过压缩，调整为false
 		})) 
+		.on('error', function (err) {
+			console.warn(err.toString());
+		})
 		.pipe(gulp.dest(releaseDir));
 	}
 })
@@ -263,18 +426,49 @@ gulp.task("compressJson", ["es6toes5"], function () {
 
 // 压缩js
 gulp.task("compressJs", ["compressJson"], function () {
-	if (config.compressJs) {
-		return gulp.src(config.compressJsFilter, { base: releaseDir })
-			.pipe(uglify({
-				mangle: {
-					keep_fnames:true
-				}
-			}))
-			.on('error', function (err) {
-				console.warn(err.toString());
-			})
-			.pipe(gulp.dest(releaseDir));
+	let compressJsFilter = null;
+	if (!config.compressJs) {
+		if (config.es6toes5 && config.useMinJsLibs) { // 如果开启了es6toes5并使用了压缩版类库
+			console.log("发布提示:\n 您当前开启了es6toes5并使用了压缩版类库，为了保证符合预期，脚本将对min文件夹下类库进行压缩");
+			compressJsFilter = [`${releaseDir}/libs/min/**/*.js`];
+		}
+	} else {
+		if (config.es6toes5 && config.useMinJsLibs) { // 如果开启了es6toes5并使用了压缩版类库
+			console.log("发布提示:\n 您当前开启了es6toes5并使用了压缩版类库，为了保证符合预期，脚本将对min文件夹下类库进行压缩");
+			compressJsFilter = config.compressJsFilter;
+			let index = compressJsFilter.indexOf(`!${releaseDir}/libs/min/**/*.js`)
+			if (index !== -1) {
+				compressJsFilter.splice(index, 1);
+			}
+		} else {
+			compressJsFilter = config.compressJsFilter;
+		}
 	}
+	if (!compressJsFilter) {
+		return;
+	}
+
+	let options = {
+		mangle: {
+			keep_fnames:true
+		}
+	}
+	if ("taobaominiapp" === platform) {
+		options = {
+			mangle: {
+				keep_fnames:true,
+				// sequences: false, // 不使用逗号
+				reserved: ["window"]
+			}
+		}
+	}
+	console.log("compressJsFilter: ", compressJsFilter);
+	return gulp.src(compressJsFilter, { base: releaseDir })
+		.pipe(uglify(options))
+		.on('error', function (err) {
+			console.warn(err.toString());
+		})
+		.pipe(gulp.dest(releaseDir));
 });
 
 // 压缩png，jpg
@@ -315,11 +509,50 @@ gulp.task("version1", ["compressImage"], function () {
 	}
 });
 
-// 替换index.js里面的变化的文件名
-gulp.task("version2", ["version1"], function () {
+// 更新index.js的hash值
+gulp.task("renameIndexJs", ["version1"], function (cb) {
+	if (config.version) {
+		let versionPath = releaseDir + "/version.json";
+		let versionCon = fs.readFileSync(versionPath, "utf8");
+		versionCon = JSON.parse(versionCon);
+		let indexJSPath;
+		let indexJsStr = (versionCon && versionCon["index.js"]) ? versionCon["index.js"] :  "index.js";
+		indexJSPath = releaseDir + "/" + indexJsStr;
+
+		return new Promise((resolve, reject) => {
+			let srcList = [versionPath, indexJSPath];
+			gulp.src(srcList)
+				.pipe(revCollector())
+				.pipe(gulp.dest(releaseDir));
+			setTimeout(resolve, 1500);
+		}).then(function() {
+			return new Promise(async function(resolve, reject) {
+				// index-xxx.js => index.js
+				let indexJsOrigin = path.join(releaseDir, "index.js")
+				fs.renameSync(indexJSPath, indexJsOrigin);
+				gulp.src(indexJsOrigin, { base: releaseDir })
+					.pipe(rev())
+					.pipe(gulp.dest(releaseDir))
+					.pipe(revdel())
+					.pipe(rev.manifest({
+						path: versionPath,
+						merge: true
+					}))
+					.pipe(gulp.dest("./")); // 注意，这里不能是releaseDir (https://segmentfault.com/q/1010000002876613)
+				setTimeout(cb, 2000);
+			})
+		}).catch(function(e) {
+			throw e;
+		})
+	} else {
+		cb();
+	}
+});
+
+// 替换index.html/game.js/main.js以及index.js里面的变化的文件名
+gulp.task("version2", ["renameIndexJs"], function () {
 	if (config.version) {
 		//替换index.html和index.js里面的文件名称
-
 		let htmlPath = releaseDir + "/index.html";
 		let versionPath = releaseDir + "/version.json";
 		let gameJSPath = releaseDir + "/game.js";
@@ -351,8 +584,13 @@ gulp.task("version2", ["version1"], function () {
 });
 
 // 筛选4M包
-gulp.task("packfile", ["version2"], function() {
+gulp.task("packfile", platformTask, function() {
 	if (config.version) {
+		if ("taobaominiapp" === platform) {
+			releaseDir = releaseDir.replace("temprelease", "pages/index");
+		} else {
+			releaseDir = releaseDir.replace("temprelease", "quickgame");
+		}
 		// 从release目录取得带有版本号的目录
 		let tempPackfile = `${workSpaceDir}/.laya/configTemp.json`;
 		let releasePackfile = `${releaseDir}/configTemp.json`;
@@ -362,6 +600,12 @@ gulp.task("packfile", ["version2"], function() {
 		fs.unlinkSync(tempPackfile);
 		fs.unlinkSync(releasePackfile);
 	}
+	if ("taobaominiapp" === platform) {
+		releaseDir = releaseDir.replace("/temprelease", "").replace("/pages/index", "");
+		for (let len = config.packfileFullValue.length, i = 0; i < len; i++) {
+			config.packfileFullValue[i] = config.packfileFullValue[i].replace("temprelease", "");
+		}
+	}
 	if (config.packfile) { // 提取本地包(文件列表形式)
 		return gulp.src(config.packfileFullValue, { base: releaseDir })
 			.pipe(gulp.dest(config.packfileTargetValue || releaseDir + "_pack"));
@@ -369,6 +613,6 @@ gulp.task("packfile", ["version2"], function() {
 });
 
 // 起始任务
-gulp.task("publish", platformTask , function () {
+gulp.task("publish", ["packfile"] , function () {
 	console.log("All tasks completed!");
 });

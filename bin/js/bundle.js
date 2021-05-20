@@ -1,81 +1,6 @@
 (function () {
     'use strict';
 
-    class Scratch extends fgui.GComponent {
-        constructor() {
-            super();
-            this.preX = 0;
-            this.preY = 0;
-            this.firstBrush = true;
-            this._circleDiameter = 40;
-            this._percentCover = 0.5;
-            this._pointCount = 100;
-            this._row = 10;
-            this._col = 10;
-            this._pointsArr = [];
-        }
-        constructFromXML(xml) {
-            super.constructFromXML(xml);
-            this.on(Laya.Event.MOUSE_DOWN, this, this.onMouseDown);
-            this.on(Laya.Event.MOUSE_UP, this, this.onMouseUp);
-            this._panel = this.getChild("panel").asCom;
-            this._maskPanel = this.getChild("mask").asCom;
-        }
-        onMouseDown(evt) {
-            if (this._maskPanel) {
-                if (this.firstBrush) {
-                    this._maskPanel.displayObject.graphics.clear();
-                    this.firstBrush = false;
-                    this.createPoints(this._maskPanel.width, this._maskPanel.height);
-                }
-                this.preX = evt.target.mouseX;
-                this.preY = evt.target.mouseY;
-                this._maskPanel.displayObject.graphics.drawCircle(this.preX, this.preY, this._circleDiameter, "#a5ff00");
-                this.on(Laya.Event.MOUSE_MOVE, this, this.onMouseMove);
-            }
-            if (this._panel) {
-                this._panel.visible = false;
-            }
-        }
-        onMouseMove(evt) {
-            var curX = evt.target.mouseX;
-            var curY = evt.target.mouseY;
-            if (this._maskPanel) {
-                this._maskPanel.displayObject.graphics.drawCircle(curX, curY, this._circleDiameter, "#a5ff00");
-                this.preX = curX;
-                this.preY = curY;
-            }
-            var point = { x: curX, y: curY };
-            this.pointsHitTest(this._pointsArr, point);
-            if (this._pointsArr.length / this._pointCount <= this._percentCover) {
-                this._maskPanel.displayObject.graphics.drawRect(0, 0, this._maskPanel.width, this._maskPanel.height, "#000");
-            }
-        }
-        onMouseUp(evt) {
-            this.off(Laya.Event.MOUSE_MOVE, this, this.onMouseMove);
-        }
-        createPoints(width, height) {
-            let widthSpan = Math.trunc(width / this._row), heightSpan = Math.trunc(height / this._col);
-            for (let i = 0; i < this._row; i++) {
-                for (let j = 0; j < this._col; j++) {
-                    let point = new Laya.Point(widthSpan * i, heightSpan * j);
-                    this._pointsArr.push(point);
-                }
-            }
-        }
-        pointsHitTest(points, source) {
-            return points.some((point, index) => {
-                if (point.distance(source.x, source.y) <= this._circleDiameter) {
-                    points.splice(index, 1);
-                    return true;
-                }
-                else {
-                    return false;
-                }
-            });
-        }
-    }
-
     class DatePicker extends fgui.GComponent {
         constructor() {
             super();
@@ -205,6 +130,81 @@
         }
     }
 
+    class Scratch extends fgui.GComponent {
+        constructor() {
+            super();
+            this.preX = 0;
+            this.preY = 0;
+            this.firstBrush = true;
+            this._circleDiameter = 40;
+            this._percentCover = 0.5;
+            this._pointCount = 100;
+            this._row = 10;
+            this._col = 10;
+            this._pointsArr = [];
+        }
+        constructFromXML(xml) {
+            super.constructFromXML(xml);
+            this.on(Laya.Event.MOUSE_DOWN, this, this.onMouseDown);
+            this.on(Laya.Event.MOUSE_UP, this, this.onMouseUp);
+            this._panel = this.getChild("panel").asCom;
+            this._maskPanel = this.getChild("mask").asCom;
+        }
+        onMouseDown(evt) {
+            if (this._maskPanel) {
+                if (this.firstBrush) {
+                    this._maskPanel.displayObject.graphics.clear();
+                    this.firstBrush = false;
+                    this.createPoints(this._maskPanel.width, this._maskPanel.height);
+                }
+                this.preX = evt.target.mouseX;
+                this.preY = evt.target.mouseY;
+                this._maskPanel.displayObject.graphics.drawCircle(this.preX, this.preY, this._circleDiameter, "#a5ff00");
+                this.on(Laya.Event.MOUSE_MOVE, this, this.onMouseMove);
+            }
+            if (this._panel) {
+                this._panel.visible = false;
+            }
+        }
+        onMouseMove(evt) {
+            var curX = evt.target.mouseX;
+            var curY = evt.target.mouseY;
+            if (this._maskPanel) {
+                this._maskPanel.displayObject.graphics.drawCircle(curX, curY, this._circleDiameter, "#a5ff00");
+                this.preX = curX;
+                this.preY = curY;
+            }
+            var point = { x: curX, y: curY };
+            this.pointsHitTest(this._pointsArr, point);
+            if (this._pointsArr.length / this._pointCount <= this._percentCover) {
+                this._maskPanel.displayObject.graphics.drawRect(0, 0, this._maskPanel.width, this._maskPanel.height, "#000");
+            }
+        }
+        onMouseUp(evt) {
+            this.off(Laya.Event.MOUSE_MOVE, this, this.onMouseMove);
+        }
+        createPoints(width, height) {
+            let widthSpan = Math.trunc(width / this._row), heightSpan = Math.trunc(height / this._col);
+            for (let i = 0; i < this._row; i++) {
+                for (let j = 0; j < this._col; j++) {
+                    let point = new Laya.Point(widthSpan * i, heightSpan * j);
+                    this._pointsArr.push(point);
+                }
+            }
+        }
+        pointsHitTest(points, source) {
+            return points.some((point, index) => {
+                if (point.distance(source.x, source.y) <= this._circleDiameter) {
+                    points.splice(index, 1);
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            });
+        }
+    }
+
     class GameConfig {
         constructor() {
         }
@@ -219,7 +219,7 @@
     GameConfig.screenMode = "none";
     GameConfig.alignV = "top";
     GameConfig.alignH = "left";
-    GameConfig.startScene = "test/TestScene.scene";
+    GameConfig.startScene = "";
     GameConfig.sceneRoot = "";
     GameConfig.debug = false;
     GameConfig.stat = false;
@@ -402,6 +402,20 @@
         }
     }
 
+    class MiniMapDemo {
+        constructor() {
+            fgui.UIPackage.loadPackage("res/UI/MiniMap", Laya.Handler.create(this, this.onUILoaded));
+        }
+        onUILoaded() {
+            this._view = fgui.UIPackage.createObject("MiniMap", "Main");
+            this._view.makeFullScreen();
+            fgui.GRoot.inst.addChild(this._view);
+        }
+        destroy() {
+            fgui.UIPackage.removePackage("MiniMap");
+        }
+    }
+
     class MainMenu {
         constructor() {
             fgui.UIPackage.loadPackage("res/UI/MainMenu", Laya.Handler.create(this, this.onUILoaded));
@@ -422,11 +436,15 @@
             this._view.getChild("n4").onClick(this, function () {
                 this.startDemo(LoadFontDemo);
             });
+            this._view.getChild("n5").onClick(this, function () {
+                this.startDemo(MiniMapDemo);
+            });
             var reg = Laya.ClassUtils.regClass;
             reg("ScratchCard", ScratchCardDemo);
             reg("ChatDemo", ChatDemo);
             reg("DatePicker", DatePickerDemo);
             reg("LoadFontDemo", LoadFontDemo);
+            reg("MiniMapDemo", MiniMapDemo);
             let demoName = this.getQueryString("name");
             if (demoName) {
                 this.startDemo(Laya.ClassUtils.getRegClass(demoName));
@@ -491,7 +509,6 @@
                 Laya["PhysicsDebugDraw"].enable();
             if (GameConfig.stat)
                 Laya.Stat.show();
-            Laya.alertGlobalError = true;
             Laya.ResourceVersion.enable("version.json", Laya.Handler.create(this, this.onVersionLoaded), Laya.ResourceVersion.FILENAME_VERSION);
         }
         onVersionLoaded() {
@@ -505,4 +522,3 @@
     new Main();
 
 }());
-//# sourceMappingURL=bundle.js.map

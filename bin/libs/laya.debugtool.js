@@ -1,4 +1,4 @@
-window.wxMiniGame = function (exports, Laya) {
+(function (exports, Laya) {
 	'use strict';
 
 	class StringTool {
@@ -908,13 +908,23 @@ window.wxMiniGame = function (exports, Laya) {
 	    static getObjectDisplayAbleKeys(obj, rst = null) {
 	        if (!rst)
 	            rst = [];
-	        var key;
-	        var tValue;
-	        for (key in obj) {
-	            tValue = obj[key];
-	            if (key.charAt(0) == "_")
+	        for (let key in obj) {
+	            let tValue = obj[key];
+	            let tType = typeof (tValue);
+	            if (key.charAt(0) == "_" || !this.displayTypes[tType])
 	                continue;
 	            rst.push(key);
+	        }
+	        let temp = obj;
+	        while (temp) {
+	            let descript = Object.getOwnPropertyDescriptors(temp);
+	            for (let element in descript) {
+	                let tValue = descript[element];
+	                if (!tValue.get)
+	                    continue;
+	                rst.push(element);
+	            }
+	            temp = Object.getPrototypeOf(temp);
 	        }
 	        ClassTool.getObjectGetSetKeys(obj, rst);
 	        rst = ObjectTools.getNoSameArr(rst);
@@ -954,7 +964,8 @@ window.wxMiniGame = function (exports, Laya) {
 	ClassTool.displayTypes = { "boolean": true, "number": true, "string": true };
 
 	class TraceTool {
-	    constructor() { }
+	    constructor() {
+	    }
 	    static closeAllLog() {
 	        var logFun;
 	        logFun = TraceTool.emptyLog;
@@ -5080,7 +5091,7 @@ window.wxMiniGame = function (exports, Laya) {
 	        if (this.tShowObj) {
 	            var key;
 	            key = obj["key"];
-	            this.preValueO[key] = this.tShowObj[key] = newValue;
+	            this.tShowObj[key] = this.preValueO[key] = newValue;
 	        }
 	    }
 	    showTargetInfo(tTarget) {
@@ -7722,7 +7733,8 @@ window.wxMiniGame = function (exports, Laya) {
 	}
 
 	class DisResizer {
-	    constructor() { }
+	    constructor() {
+	    }
 	    static init() {
 	        if (DisResizer._up)
 	            return;
@@ -7977,4 +7989,4 @@ window.wxMiniGame = function (exports, Laya) {
 	exports.XML2Object = XML2Object;
 	exports.XML2ObjectNodejs = XML2ObjectNodejs;
 
-} 
+}(window.Laya = window.Laya || {}, Laya));
