@@ -130,6 +130,122 @@
         }
     }
 
+    class Joystick extends fgui.GComponent {
+        constructor() {
+            super();
+            this.touchId = -1;
+            this.radius = 60;
+            this._curPos = new Laya.Point();
+        }
+        constructFromXML(xml) {
+            super.constructFromXML(xml);
+            this._button = this.getChild("joystick").asButton;
+            this._button.changeStateOnClick = false;
+            this._thumb = this._button.getChild("thumb");
+            this._touchArea = this.getChild("joystick_touch");
+            this._center = this.getChild("joystick_center");
+            this._InitX = this._center.x + this._center.width / 2;
+            this._InitY = this._center.y + this._center.height / 2;
+            this._touchArea.on(Laya.Event.MOUSE_DOWN, this, this.onTouchDown);
+        }
+        Trigger(evt) {
+            this.onTouchDown(evt);
+        }
+        onTouchDown(evt) {
+            if (this.touchId == -1) {
+                this.touchId = evt.touchId;
+                if (this._tweener != null) {
+                    this._tweener.kill();
+                    this._tweener = null;
+                }
+                fgui.GRoot.inst.globalToLocal(Laya.stage.mouseX, Laya.stage.mouseY, this._curPos);
+                var bx = this._curPos.x - this.x;
+                var by = this._curPos.y - this.y;
+                this._button.selected = true;
+                if (bx < 0)
+                    bx = 0;
+                else if (bx > this._touchArea.width)
+                    bx = this._touchArea.width;
+                if (by > fgui.GRoot.inst.height)
+                    by = fgui.GRoot.inst.height;
+                else if (by < this._touchArea.y)
+                    by = this._touchArea.y;
+                this._lastStageX = bx;
+                this._lastStageY = by;
+                this._startStageX = bx;
+                this._startStageY = by;
+                this._center.visible = true;
+                this._center.x = bx - this._center.width / 2;
+                this._center.y = by - this._center.height / 2;
+                this._button.x = bx - this._button.width / 2;
+                this._button.y = by - this._button.height / 2;
+                var deltaX = bx - this._InitX;
+                var deltaY = by - this._InitY;
+                var degrees = Math.atan2(deltaY, deltaX) * 180 / Math.PI;
+                this._thumb.rotation = degrees + 90;
+                Laya.stage.on(Laya.Event.MOUSE_MOVE, this, this.OnTouchMove);
+                Laya.stage.on(Laya.Event.MOUSE_UP, this, this.OnTouchUp);
+            }
+        }
+        OnTouchUp(evt) {
+            if (this.touchId != -1 && evt.touchId == this.touchId) {
+                this.touchId = -1;
+                this._thumb.rotation = this._thumb.rotation + 180;
+                this._center.visible = false;
+                this._tweener = fgui.GTween.to2(this._button.x, this._button.y, this._InitX - this._button.width / 2, this._InitY - this._button.height / 2, 0.3)
+                    .setTarget(this._button, this._button.setXY)
+                    .setEase(fgui.EaseType.CircOut)
+                    .onComplete(this.onTweenComplete, this);
+                Laya.stage.off(Laya.Event.MOUSE_MOVE, this, this.OnTouchMove);
+                Laya.stage.off(Laya.Event.MOUSE_UP, this, this.OnTouchUp);
+                Laya.stage.event(Joystick.JoystickUp);
+            }
+        }
+        onTweenComplete() {
+            this._tweener = null;
+            this._button.selected = false;
+            this._thumb.rotation = 0;
+            this._center.visible = true;
+            this._center.x = this._InitX - this._center.width / 2;
+            this._center.y = this._InitY - this._center.height / 2;
+        }
+        OnTouchMove(evt) {
+            if (this.touchId != -1 && evt.touchId == this.touchId) {
+                var bx = Laya.stage.mouseX - this.x;
+                var by = Laya.stage.mouseY - this.y;
+                var moveX = bx - this._lastStageX;
+                var moveY = by - this._lastStageY;
+                this._lastStageX = bx;
+                this._lastStageY = by;
+                var buttonX = this._button.x + moveX;
+                var buttonY = this._button.y + moveY;
+                var offsetX = buttonX + this._button.width / 2 - this._startStageX;
+                var offsetY = buttonY + this._button.height / 2 - this._startStageY;
+                var rad = Math.atan2(offsetY, offsetX);
+                var degree = rad * 180 / Math.PI;
+                this._thumb.rotation = degree + 90;
+                var maxX = this.radius * Math.cos(rad);
+                var maxY = this.radius * Math.sin(rad);
+                if (Math.abs(offsetX) > Math.abs(maxX))
+                    offsetX = maxX;
+                if (Math.abs(offsetY) > Math.abs(maxY))
+                    offsetY = maxY;
+                buttonX = this._startStageX + offsetX;
+                buttonY = this._startStageY + offsetY;
+                if (buttonX < 0)
+                    buttonX = 0;
+                if (buttonY > fgui.GRoot.inst.height)
+                    buttonY = fgui.GRoot.inst.height;
+                this._button.x = buttonX - this._button.width / 2;
+                this._button.y = buttonY - this._button.height / 2;
+                let vector2 = new Laya.Vector2(offsetX, offsetY);
+                Laya.stage.event(Joystick.JoystickMoving, { vector2, degree });
+            }
+        }
+    }
+    Joystick.JoystickMoving = "JoystickMoving";
+    Joystick.JoystickUp = "JoystickUp";
+
     class Scratch extends fgui.GComponent {
         constructor() {
             super();
@@ -211,10 +327,11 @@
         static init() {
             fgui.UIObjectFactory.setExtension("ui://ScratchCard/scratch", Scratch);
             fgui.UIObjectFactory.setExtension("ui://DatePicker/datePicker", DatePicker);
+            fgui.UIObjectFactory.setExtension("ui://MiniMap/joystick", Joystick);
         }
     }
-    GameConfig.width = 1920;
-    GameConfig.height = 1080;
+    GameConfig.width = 1720;
+    GameConfig.height = 720;
     GameConfig.scaleMode = "fixedwidth";
     GameConfig.screenMode = "none";
     GameConfig.alignV = "top";
@@ -404,14 +521,63 @@
 
     class MiniMapDemo {
         constructor() {
+            this._onPress = false;
+            this.miniMapRatio = 1;
+            this._roleVector = new Laya.Vector2();
+            this._speed = 0.05;
             fgui.UIPackage.loadPackage("res/UI/MiniMap", Laya.Handler.create(this, this.onUILoaded));
         }
         onUILoaded() {
             this._view = fgui.UIPackage.createObject("MiniMap", "Main");
             this._view.makeFullScreen();
             fgui.GRoot.inst.addChild(this._view);
+            this._map = this._view.getChild("map").asCom;
+            this._mapSign = this._map.getChild("sign").asCom;
+            this._role = this._view.getChild("role").asCom;
+            this._bg = this._view.getChild("bg").asCom;
+            Laya.timer.callLater(this, this.createMiniMap);
+            Laya.stage.on(Joystick.JoystickMoving, this, this.onTouchMove);
+            Laya.stage.on(Joystick.JoystickUp, this, this.onTouchUp);
+            Laya.timer.frameLoop(1, this, this.onFrame);
+        }
+        createMiniMap() {
+            let bg = this._view.getChild("bg");
+            let { x, y, width, height } = bg;
+            let htmlCanvas = bg.displayObject.drawToCanvas(width, height, x, y);
+            this.bgTexture = htmlCanvas.getTexture();
+            this._map.displayObject.graphics.drawTexture(this.bgTexture, 0, 0, this._map.width, this._map.height);
+            this.miniMapRatio = this._map.width / width;
+        }
+        onTouchMove(evt) {
+            this._onPress = true;
+            let { degree, vector2 } = evt;
+            degree += 90;
+            this._role.rotation = degree;
+            this._mapSign.rotation = degree;
+            this._roleVector = vector2;
+        }
+        onTouchUp() {
+            this._onPress = false;
+        }
+        onFrame() {
+            if (this._onPress) {
+                let { x, y } = this._roleVector;
+                let sx = x * this._speed, sy = y * this._speed;
+                if (this._role.x + sx >= this._bg.x && this._role.x + this._role.width + sx < this._bg.x + this._bg.width) {
+                    this._role.x += sx;
+                    this._mapSign.x += (sx * this.miniMapRatio);
+                }
+                if (this._role.y + sy >= this._bg.y && this._role.y + this._role.height + sy < this._bg.y + this._bg.height) {
+                    this._role.y += sy;
+                    this._mapSign.y += (sy * this.miniMapRatio);
+                }
+            }
         }
         destroy() {
+            Laya.stage.off(Joystick.JoystickMoving, this, this.onTouchMove);
+            Laya.stage.off(Joystick.JoystickUp, this, this.onTouchUp);
+            Laya.timer.clear(this, this.onFrame);
+            this._view.dispose();
             fgui.UIPackage.removePackage("MiniMap");
         }
     }

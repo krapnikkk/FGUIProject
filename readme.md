@@ -9,7 +9,7 @@
 | [日期选择](./src/demo/DatePickerDemo.ts) | [查看](https://krapnikkk.github.io/FGUIProject/bin/index.html?name=DatePicker)  |
 | [表情聊天](./src/demo/ChatDemo.ts)     |  [查看](https://krapnikkk.github.io/FGUIProject/bin/index.html?name=ChatDemo)   |
 | [加载字体](./src/demo/LoadFontDemo.ts)     |  [查看](https://krapnikkk.github.io/FGUIProject/bin/index.html?name=LoadFontDemo)   |
-
+| [迷你地图](./src/demo/MiniMapDemo.ts)     |  [查看](https://krapnikkk.github.io/FGUIProject/bin/index.html?name=MiniMapDemo)   |
 
 [/placeholder]:p
 
@@ -17,6 +17,13 @@
 
 [案例首页](https://krapnikkk.github.io/FGUIProject/bin)
 
+```
+编译命令
+
+layaair2-cmd compile
+
+
+```
 ## Author
 krapnik
 

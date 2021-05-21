@@ -16,5 +16,8 @@
     <component id="n5_uvpf" name="n4" src="rftu4" fileName="Button.xml" xy="125,318" size="235,51">
       <Button title="加载字体"/>
     </component>
+    <component id="n6_unmd" name="n5" src="rftu4" fileName="Button.xml" xy="125,398" size="235,51">
+      <Button title="小地图"/>
+    </component>
   </displayList>
 </component>

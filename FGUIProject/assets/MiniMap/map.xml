@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="128,128">
+  <displayList>
+    <image id="n3_unmd" name="frame" src="unmd3" fileName="images/panel_woodDetail_blank.png" xy="-18,-18" size="164,164">
+      <relation target="" sidePair="width-width,height-height,center-center,middle-middle"/>
+    </image>
+    <image id="n5_unmd" name="sign" src="unmd1" fileName="images/minimapIcon_arrowA.png" xy="48,48" pivot="0.5,0.5">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+  </displayList>
+</component>

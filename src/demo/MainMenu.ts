@@ -2,6 +2,7 @@ import ScratchCardDemo from "./ScratchCardDemo";
 import ChatDemo from "./ChatDemo";
 import DatePickerDemo from "./DatePickerDemo";
 import LoadFontDemo from "./LoadFontDemo";
+import MiniMapDemo from "./MiniMapDemo";
 
 export default class MainMenu {
     private _view: fgui.GComponent;
@@ -27,12 +28,16 @@ export default class MainMenu {
         this._view.getChild("n4").onClick(this, function () {
             this.startDemo(LoadFontDemo);
         });
+        this._view.getChild("n5").onClick(this, function () {
+            this.startDemo(MiniMapDemo);
+        });
         
         var reg: Function = Laya.ClassUtils.regClass;
         reg("ScratchCard",ScratchCardDemo);
         reg("ChatDemo",ChatDemo);
         reg("DatePicker",DatePickerDemo);
         reg("LoadFontDemo",LoadFontDemo);
+        reg("MiniMapDemo",MiniMapDemo);
         let demoName = this.getQueryString("name");
         if(demoName){
             this.startDemo(Laya.ClassUtils.getRegClass(demoName));

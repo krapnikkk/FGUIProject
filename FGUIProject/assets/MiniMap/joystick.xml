@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="160,160">
+  <displayList>
+    <image id="n10_unmd" name="joystick_center" src="unmdd" fileName="images/0.png" xy="42,41"/>
+    <component id="n11_unmd" name="joystick" src="unmdc" fileName="circle.xml" xy="-20,-20">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </component>
+    <graph id="n13_unmd" name="joystick_touch" xy="0,0" size="160,160" type="rect" lineSize="0" fillColor="#00ffffff">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </graph>
+  </displayList>
+</component>

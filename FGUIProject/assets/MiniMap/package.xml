@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="r6i0ghnw">
+  <resources>
+    <image id="unmd1" name="minimapIcon_arrowA.png" path="/images/"/>
+    <image id="unmd3" name="panel_woodDetail_blank.png" path="/images/" scale="9grid" scale9grid="32,32,64,64"/>
+    <image id="unmd4" name="tank_blue.png" path="/images/"/>
+    <image id="unmd5" name="tank_red.png" path="/images/"/>
+    <image id="unmd6" name="tileGrass1.png" path="/images/" scale="tile" scale9grid="32,32,64,64" duplicatePadding="true" disableTrim="true"/>
+    <image id="unmd7" name="tileSand1.png" path="/images/" scale="tile" duplicatePadding="true" disableTrim="true"/>
+    <component id="unmd8" name="Main.xml" path="/" exported="true"/>
+    <component id="unmd9" name="map.xml" path="/"/>
+    <component id="unmda" name="bg.xml" path="/"/>
+    <component id="unmdb" name="tank.xml" path="/"/>
+    <component id="unmdc" name="circle.xml" path="/"/>
+    <image id="unmdd" name="0.png" path="/images/"/>
+    <image id="unmde" name="1.png" path="/images/"/>
+    <component id="unmdf" name="joystick.xml" path="/" exported="true"/>
+  </resources>
+  <publish name="MiniMap"/>
+</packageDescription>

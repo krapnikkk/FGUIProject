@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1280,720">
+  <displayList>
+    <image id="n0_unmd" name="bg" src="unmd6" fileName="images/tileGrass1.png" xy="0,0" size="1280,720">
+      <relation target="" sidePair="width-width,height-height,center-center,middle-middle"/>
+    </image>
+    <image id="n1_unmd" name="n1" src="unmd7" fileName="images/tileSand1.png" xy="251,76" size="200,100">
+      <relation target="" sidePair="left-left,bottom-bottom"/>
+    </image>
+    <image id="n2_unmd" name="n2" src="unmd7" fileName="images/tileSand1.png" xy="722,470" size="360,180">
+      <relation target="" sidePair="right-right,bottom-bottom"/>
+    </image>
+  </displayList>
+</component>

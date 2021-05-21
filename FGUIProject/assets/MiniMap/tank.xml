@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="42,46">
+  <displayList>
+    <image id="n1_unmd" name="role" src="unmd4" fileName="images/tank_blue.png" xy="0,0" flip="vt"/>
+  </displayList>
+</component>

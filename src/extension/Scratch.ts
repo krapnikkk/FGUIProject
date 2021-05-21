@@ -43,7 +43,7 @@ export default class Scratch extends fgui.GComponent {
             this.preX = curX;
             this.preY = curY
         }
-        var point = { x:curX, y:curY} as laya.maths.Point;
+        var point = { x:curX, y:curY} as Laya.Point;
         this.pointsHitTest(this._pointsArr,point);
         if(this._pointsArr.length/this._pointCount<=this._percentCover){
             this._maskPanel.displayObject.graphics.drawRect(0,0,this._maskPanel.width, this._maskPanel.height,"#000");
@@ -68,7 +68,7 @@ export default class Scratch extends fgui.GComponent {
         }
     }
 
-    private pointsHitTest(points:Array<Laya.Point>,source:laya.maths.Point):boolean {
+    private pointsHitTest(points:Array<Laya.Point>,source:Laya.Point):boolean {
         return points.some((point:Laya.Point,index:number)=>{
             if(point.distance(source.x,source.y)<=this._circleDiameter){
                 points.splice(index,1);
