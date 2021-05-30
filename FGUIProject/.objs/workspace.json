@@ -4,6 +4,7 @@
   "doc.openedDocs": [
     "ui://j07d2ugquvpf0",
     "ui://j07d2ugquvpf3",
+    "ui://y768eypafvaib",
     "ui://j07d2ugquvpf2",
     "ui://bbc15022ir7j4",
     "ui://hf9z2x8ipkoj0",
@@ -12,13 +13,10 @@
   ],
   "auxline1": true,
   "canvasColor": 10066329,
-  "libview.expandedNodes": [
-    "j07d2ugq",
-    "/"
-  ],
-  "doc.activeDoc": "ui://j07d2ugquvpf3",
-  "libview.twoColumn": false,
   "auxline2": true,
+  "doc.activeDoc": "ui://y768eypafvaib",
+  "libview.twoColumn": false,
+  "libview.expandedNodes": [],
   "snapToGrid": true,
   "backgroundColor": 6710886,
   "libview.currentGroup": "",
