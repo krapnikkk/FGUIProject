@@ -103,9 +103,9 @@ export default class DatePicker extends fgui.GComponent {
         if (yearIdx == 0) {
             this.yearOnScroll();
         }
-        if (monthIdx == 0) {
+        // if (monthIdx == 0) {
             this.monthOnScroll();
-        }
+        // }
         if (dateIdx == 0) {
             this.dateOnScroll();
         }

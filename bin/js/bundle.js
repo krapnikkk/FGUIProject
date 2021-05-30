@@ -82,9 +82,7 @@
             if (yearIdx == 0) {
                 this.yearOnScroll();
             }
-            if (monthIdx == 0) {
-                this.monthOnScroll();
-            }
+            this.monthOnScroll();
             if (dateIdx == 0) {
                 this.dateOnScroll();
             }
